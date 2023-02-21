@@ -6,20 +6,26 @@ import KeyboardDoubleArrowDownRoundedIcon from '@mui/icons-material/KeyboardDoub
 import Header from '../components/Header';
 
 function ManageCertificationsPage() {
+    const navigate = useNavigate();
+
+    const onClickCreate = () => {
+        navigate('/createcertifications');
+    };
+
     return (
         <>
             <Header />
             <Title>인증서 조회</Title>
             <Body>
-                <CreateButton>신규 발급</CreateButton>
+                <CreateButton onClick={onClickCreate}>신규 발급</CreateButton>
                 <SearchStack>
                     <SearchItem direction="row" alignItems='center'>
                         <SearchTitle>기간별</SearchTitle>
                         <DateButton>전체</DateButton>
-                        <DateButton>1주</DateButton>
-                        <DateButton>1개월</DateButton>
-                        <DateButton>6개월</DateButton>
-                        <DateButton>1년</DateButton>
+                        <DateButton2>1주</DateButton2>
+                        <DateButton2>1개월</DateButton2>
+                        <DateButton2>6개월</DateButton2>
+                        <DateButton2>1년</DateButton2>
                     </SearchItem>
                     <SearchItem direction="row" alignItems='center' justifyContent='space-between'>
                         <Stack direction="row" alignItems='center'>
@@ -186,12 +192,24 @@ const SearchTitle = styled(Box)(() => ({
 }));
 
 const DateButton = styled(Button)(() => ({
-    backgroundColor: 'black',
+    backgroundColor: 'grey',
     color: 'white',
-    border: '1px solid black',
+    border: '1px solid grey',
     marginRight: 5,
     '&:hover': {
-        backgroundColor: 'grey',
+        backgroundColor: '#D0D0D0',
+        border: '1px solid #D0D0D0',
+    },
+}));
+
+const DateButton2 = styled(Button)(() => ({
+    backgroundColor: 'white',
+    color: '#D0D0D0',
+    border: '1px solid #D0D0D0',
+    marginRight: 5,
+    '&:hover': {
+        backgroundColor: '#F0F0F0',
+        border: '1px solid #D0D0D0',
     },
 }));
 
