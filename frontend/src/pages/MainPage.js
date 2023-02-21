@@ -13,6 +13,20 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function MainPage() {
+    const navigate = useNavigate();
+
+    const onClickCert = () => {
+        navigate('/managecertifications');
+    };
+
+    const onClickUsePoints = () => {
+        navigate('/usepoints');
+    };
+
+    const onClickManagePoints = () => {
+        navigate('/managepoints');
+    };
+
     return (
         <>
             <Header />
@@ -20,7 +34,7 @@ function MainPage() {
                 <Grid item sx={{paddingRight: '100px'}}>
                     <Box sx={{fontFamily: 'PretendardB', fontSize: 20, padding: '20px 0 10px 0', lineHeight: 1.5}}>블록체인 기반의<br/>봉사 인증서 발급 시스템</Box>
                     <Box sx={{fontSize: 14, color: 'grey', padding: '10px 0 30px 0', lineHeight: 1.5}}>디지털 봉사 인증서를 발급하여<br/>인증서를 쉽고 안전하게 보관하세요.</Box>
-                    <Box sx={{padding: '30px 0 20px 0'}}><CustomButton variant="contained">인증서 확인하러가기</CustomButton></Box>
+                    <Box sx={{padding: '30px 0 20px 0'}}><CustomButton onClick={onClickCert} variant="contained">인증서 확인하러가기</CustomButton></Box>
                 </Grid>
                 <Grid item sx={{paddingLeft: '100px'}}><img src={main1} width={250} alt="img"/></Grid>
             </Banner>
@@ -43,14 +57,14 @@ function MainPage() {
                             <Box sx={{fontSize: 10, color: 'grey', padding: '2px 0 0 0', lineHeight: 1.5}}>다양한<br/>공직 서비스들을 할인해보세요.</Box>
                         </Grid>
                     </Grid>
-                    <Box sx={{padding: '10px 0 20px 0'}}><CustomButton variant="contained">포인트 확인하러가기</CustomButton></Box>
+                    <Box sx={{padding: '10px 0 20px 0'}}><CustomButton onClick={onClickManagePoints} variant="contained">포인트 확인하러가기</CustomButton></Box>
                 </Grid>
             </Banner>
             <Banner container direction="row"  sx={{backgroundColor: '#F1F1FD'}}>
                 <Grid item sx={{paddingRight: '80px'}}>
                     <Box sx={{fontFamily: 'PretendardB', fontSize: 20, padding: '20px 0 10px 0', lineHeight: 1.5}}>포인트를 사용하여<br/>다양한 물품 구매</Box>
                     <Box sx={{fontSize: 14, color: 'grey', padding: '10px 0 30px 0', lineHeight: 1.5}}>지급받은 포인트를 사용하여<br/>사이트에 등록된 다양한 물품들을 구매하세요.</Box>
-                    <Box sx={{padding: '30px 0 20px 0'}}><CustomButton variant="contained">물품 구매하러가기</CustomButton></Box>
+                    <Box sx={{padding: '30px 0 20px 0'}}><CustomButton onClick={onClickUsePoints} variant="contained">물품 구매하러가기</CustomButton></Box>
                 </Grid>
                 <Grid item sx={{paddingLeft: '80px'}}><img src={main3} width={300} alt="img"/></Grid>
             </Banner>

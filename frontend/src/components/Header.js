@@ -1,37 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Avatar, Button } from '@mui/material';
+import { Box, Stack, Avatar, Button } from '@mui/material';
 
 function Header() {
+    const [login, setLogin] = useState(true);
     const navigate = useNavigate();
+    
     const onClickHome = () => {
         navigate('/');
     };
+
     const onClickUser = () => {
-        navigate('/login');
+        if(login === false) {
+            navigate('/login');
+        } else {
+            navigate('/mypage');
+        }
+    };
+
+    const onClickCert = () => {
+        navigate('/managecertifications');
+    };
+
+    const onClickUsePoints = () => {
+        navigate('/usepoints');
+    };
+
+    const onClickManagePoints = () => {
+        navigate('/managepoints');
     };
 
     return (
         <>
             <Frame>
-                <Grid container alignItems='center'>
-                    <Grid item xs={2}><Title onClick={onClickHome}>SINEMUSCAT</Title></Grid>
-                    <Grid item xs={3.8} />
-                    <Grid item xs={1.8}><Menu>봉사 인증서 관리</Menu></Grid>
-                    <Grid item xs={1.8}><Menu>포인트 사용</Menu></Grid>
-                    <Grid item xs={1.8}><Menu>2000 points</Menu></Grid>
-                    <Grid item xs={0.8} sx={{paddingLeft: 1}}><User onClick={onClickUser}><CustomAvatar /></User></Grid>
-                </Grid>
+                <Stack direction="row" alignItems='center' justifyContent='space-between'>
+                    <Box><Title onClick={onClickHome}>SINEMUSCAT</Title></Box>
+                    <Stack direction="row" spacing={5}>
+                        <Box><Menu onClick={onClickCert}>봉사 인증서 관리</Menu></Box>
+                        <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
+                        <Box><Menu onClick={onClickManagePoints}>2000 points</Menu></Box>
+                        {
+                            login ? 
+                            <LoginAvatar onClick={onClickUser}>GJ</LoginAvatar> :
+                            <CustomAvatar onClick={onClickUser} />
+                        }
+                    </Stack>
+                </Stack>
             </Frame>
-            <Box sx={{height: 80}} />
+            <Box sx={{height: 60}} />
         </>
     );
 }
 
 const Frame = styled(Box)(() => ({
-    padding: '10px 20px 10px 20px', 
-    height: 60,
+    padding: '5px 30px 5px 20px', 
     backgroundColor: 'white',
     position: 'fixed', 
     top: 0, 
@@ -44,7 +67,7 @@ const Title = styled(Button)(() => ({
     // border: '1px dashed #D09', 
     textAlign: 'center', 
     fontFamily: 'PretendardB', 
-    fontSize: 24,
+    fontSize: 22,
     color: 'black',
     '&:hover': {
         backgroundColor: 'transparent',
@@ -57,7 +80,7 @@ const Menu = styled(Button)(() => ({
     width: '100%',
     textAlign: 'center', 
     fontFamily: 'PretendardL',
-    fontSize: 16,
+    fontSize: 14,
     color: 'black',
     '&:hover': {
         backgroundColor: 'transparent',
@@ -65,17 +88,22 @@ const Menu = styled(Button)(() => ({
       },
 }));
 
-const User = styled(Button)(() => ({
-    // border: '1px dashed #A09',
-    padding: 0,
+const LoginAvatar = styled(Avatar)(() => ({
+    height: 35,
+    width: 35,
+    backgroundColor: '#6323BD',
     '&:hover': {
-        backgroundColor: 'transparent',
+        backgroundColor: '#6323BDBF',
+        cursor: 'pointer'
       },
 }));
 
 const CustomAvatar = styled(Avatar)(() => ({
+    height: 35,
+    width: 35,
     '&:hover': {
         backgroundColor: '#D9D9D9',
+        cursor: 'pointer'
       },
 }));
 
