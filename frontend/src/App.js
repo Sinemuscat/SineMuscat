@@ -12,6 +12,7 @@ import ManagePointsPage from './pages/ManagePointsPage';
 import ManageCertificationsPage from './pages/ManageCertificationsPage';
 import UsePointsPage from './pages/UsePointsPage';
 import EditUserInfoPage from './pages/EditUserInfoPage';
+import CreateCertificationsPage from './pages/CreateCertificationsPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/usepoints" element={<UsePointsPage />} />
             <Route path="/managecertifications" element={<ManageCertificationsPage />} />
             <Route path="/edituserinfo" element={<EditUserInfoPage />} />
+            <Route path="/createcertifications" element={<CreateCertificationsPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

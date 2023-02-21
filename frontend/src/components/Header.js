@@ -39,10 +39,10 @@ function Header() {
                     <Stack direction="row" spacing={5}>
                         <Box><Menu onClick={onClickCert}>봉사 인증서 관리</Menu></Box>
                         <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
-                        <Box><Menu onClick={onClickManagePoints}>2000 points</Menu></Box>
+                        <Box><Menu onClick={onClickManagePoints}>2000 Points</Menu></Box>
                         {
                             login ? 
-                            <LoginAvatar onClick={onClickUser}>GJ</LoginAvatar> :
+                            <LoginAvatar onClick={onClickUser}>규진</LoginAvatar> :
                             <CustomAvatar onClick={onClickUser} />
                         }
                     </Stack>

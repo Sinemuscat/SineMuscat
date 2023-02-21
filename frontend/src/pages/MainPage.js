@@ -10,7 +10,6 @@ import main1 from '../images/main1.png';
 import main2 from '../images/main2.png';
 import main3 from '../images/main3.png';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 
 function MainPage() {
     const navigate = useNavigate();
@@ -68,7 +67,6 @@ function MainPage() {
                 </Grid>
                 <Grid item sx={{paddingLeft: '80px'}}><img src={main3} width={300} alt="img"/></Grid>
             </Banner>
-            {/* <Footer /> */}
         </>
     );
 }
