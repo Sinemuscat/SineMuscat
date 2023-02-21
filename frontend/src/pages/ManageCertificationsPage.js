@@ -1,0 +1,235 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+import { Box, Grid, Stack, Button, TextField } from '@mui/material';
+import KeyboardDoubleArrowDownRoundedIcon from '@mui/icons-material/KeyboardDoubleArrowDownRounded';
+import Header from '../components/Header';
+
+function ManageCertificationsPage() {
+    return (
+        <>
+            <Header />
+            <Title>인증서 조회</Title>
+            <Body>
+                <CreateButton>신규 발급</CreateButton>
+                <SearchStack>
+                    <SearchItem direction="row" alignItems='center'>
+                        <SearchTitle>기간별</SearchTitle>
+                        <DateButton>전체</DateButton>
+                        <DateButton>1주</DateButton>
+                        <DateButton>1개월</DateButton>
+                        <DateButton>6개월</DateButton>
+                        <DateButton>1년</DateButton>
+                    </SearchItem>
+                    <SearchItem direction="row" alignItems='center' justifyContent='space-between'>
+                        <Stack direction="row" alignItems='center'>
+                            <SearchTitle>센터명</SearchTitle>
+                            <TextField
+                                size="small"
+                            />
+                        </Stack>
+                        <SearchButton>검색</SearchButton>
+                    </SearchItem>
+                </SearchStack>
+                <Box sx={{width: '100%', textAlign: 'center', padding: '15px 0 15px 0'}}>
+                    <KeyboardDoubleArrowDownRoundedIcon sx={{fontSize: 30, color: 'lightgrey'}} />
+                </Box>
+                <ResultStack container direction="row">
+                    <Grid item xs={6}>
+                        <ResultTitle>사용 가능 포인트</ResultTitle>
+                        <Stack direction="row" alignItems="end" mt={1}>
+                            <Box sx={{fontFamily: 'PretendardM', fontSize: 66}}>2,500</Box>
+                            <Box sx={{fontSize: 24, padding: '0 0 2px 10px'}}>Points</Box>
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Stack direction="row" alignItems="center">
+                            <ResultTitle>총 봉사 횟수</ResultTitle>
+                            <Stack direction="row" alignItems="end">
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>129</Box>
+                                <Box sx={{fontSize: 18, padding: '0 0 4px 4px'}}>회</Box>
+                            </Stack>
+                        </Stack>
+                        <Stack direction="row" alignItems="center" mt={2}>
+                            <ResultTitle>총 봉사 시간</ResultTitle>
+                            <Stack direction="row" alignItems="end">
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>241</Box>
+                                <Box sx={{fontSize: 18, padding: '0 10px 4px 4px'}}>시간</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>20</Box>
+                                <Box sx={{fontSize: 18, padding: '0 0 4px 4px'}}>분</Box>
+                            </Stack>
+                        </Stack>
+                    </Grid>
+                </ResultStack>
+                <ListStack>
+                    <Grid container sx={{textAlign: 'center', color: 'grey'}}>
+                        <Grid item xs={1} sx={{padding: '10px'}}>번호</Grid>
+                        <Grid item xs={9} sx={{padding: '10px'}}>인증서 내용</Grid>
+                        <Grid item xs={2} sx={{padding: '10px'}}>포인트</Grid>
+                    </Grid>
+
+                    <ListItem container>
+                        <ListSubItem item xs={1}>129</ListSubItem>
+                        <Grid item xs={9} sx={{padding: '10px'}}>
+                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
+                            <Grid container>
+                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
+                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
+                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
+                            </Grid>
+                        </Grid>
+                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
+                    </ListItem>
+                    <ListItem container>
+                        <ListSubItem item xs={1}>128</ListSubItem>
+                        <Grid item xs={9} sx={{padding: '10px'}}>
+                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
+                            <Grid container>
+                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
+                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
+                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
+                            </Grid>
+                        </Grid>
+                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
+                    </ListItem>
+                    <ListItem container>
+                        <ListSubItem item xs={1}>127</ListSubItem>
+                        <Grid item xs={9} sx={{padding: '10px'}}>
+                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
+                            <Grid container>
+                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
+                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
+                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
+                            </Grid>
+                        </Grid>
+                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
+                    </ListItem>
+                    <ListItem container>
+                        <ListSubItem item xs={1}>126</ListSubItem>
+                        <Grid item xs={9} sx={{padding: '10px'}}>
+                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
+                            <Grid container>
+                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
+                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
+                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
+                            </Grid>
+                        </Grid>
+                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
+                    </ListItem>
+                    <ListItem container>
+                        <ListSubItem item xs={1}>125</ListSubItem>
+                        <Grid item xs={9} sx={{padding: '10px'}}>
+                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
+                            <Grid container>
+                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
+                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
+                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
+                            </Grid>
+                        </Grid>
+                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
+                    </ListItem>
+                    <Stack direction="row" justifyContent='center' mt={2}>
+                        <Box sx={{padding: '20px', color: '#0094FF'}}>1</Box>
+                        <Box sx={{padding: '20px'}}>2</Box>
+                        <Box sx={{padding: '20px'}}>3</Box>
+                        <Box sx={{padding: '20px'}}>4</Box>
+                        <Box sx={{padding: '20px'}}>5</Box>
+                    </Stack>
+                </ListStack>
+            </Body>
+        </>
+    );
+}
+
+const Title = styled(Box)(() => ({
+    padding: '50px 0 30px 0', 
+    textAlign: 'center', 
+    fontFamily: 'PretendardB', 
+    fontSize: 22,
+}));
+
+const Body = styled(Stack)(() => ({
+    position: 'relative',
+    left: '50%',
+    transform: 'translate(-50%, 0)', 
+    width: 1000,
+    paddingBottom: 50,
+}));
+
+const CreateButton = styled(Button)(() => ({
+    position: 'relative',
+    left: '100%',
+    transform: 'translate(-100%, 0)', 
+    width: 100,
+    marginBottom: 10,
+    fontSize: 14,
+    fontFamily: 'PretendardM',
+    color: 'white',
+    backgroundColor: '#0094FF', 
+    '&:hover': {
+        backgroundColor: '#34ABFF',
+    },
+}));
+
+const SearchStack = styled(Stack)(() => ({
+    border: '1px solid lightgrey',
+    padding: 20
+}));
+
+const SearchItem = styled(Stack)(() => ({
+    padding: 10
+}));
+
+const SearchTitle = styled(Box)(() => ({
+    fontSize: 14,
+    width: 80
+}));
+
+const DateButton = styled(Button)(() => ({
+    backgroundColor: 'black',
+    color: 'white',
+    border: '1px solid black',
+    marginRight: 5,
+    '&:hover': {
+        backgroundColor: 'grey',
+    },
+}));
+
+const SearchButton = styled(Button)(() => ({
+    color: '#0094FF',
+    border: '1px solid #0094FF', 
+}));
+
+const ResultStack = styled(Grid)(() => ({
+    border: '1px solid lightgrey',
+    padding: 20
+}));
+
+const ResultTitle = styled(Box)(() => ({
+    display: 'inline-block',
+    border: '1px solid lightgrey',
+    color: 'grey',
+    textAlign: 'center',
+    padding: 10,
+    marginRight: 20,
+    fontSize: 14,
+    borderRadius: 5,
+}));
+
+const ListStack = styled(Stack)(() => ({
+    marginTop: 40,
+}));
+
+const ListItem = styled(Grid)(() => ({
+    border: '1px solid lightgrey',
+    lineHeight: '25px',
+    marginBottom: '5px'
+}));
+
+const ListSubItem = styled(Grid)(() => ({
+    textAlign: 'center',
+    lineHeight: '50px',
+    padding: '10px',
+}));
+
+export default ManageCertificationsPage;
