@@ -3,49 +3,50 @@ package main
 import (
 	"context"
 	"fmt"
+	cdp "github.com/chromedp/chromedp"
 	"log"
 	"time"
-
-	"github.com/chromedp/chromedp"
 )
 
-type config struct {
-	title          string
-	dateOfIssue    string
-	activityPeriod string
-	serviceTime    string
-}
+func sendRequest(url, username, issuenumber string) {
+	selname := `//input[@id="schVltrNm"]`
+	selissu := `//input[@id="schIssuNo"]`
 
-func main() {
-	contextVar, cancelFunc := chromedp.NewContext(
+	restitle := `//div[@class="board_list board_list2 non_sub"]` // 봉사 내역
+
+	contextVar, cancelFunc := cdp.NewContext(
 		context.Background(),
-		chromedp.WithLogf(log.Printf),
+		cdp.WithLogf(log.Printf),
 	)
 	defer cancelFunc()
 
-	contextVar, cancelFunc = context.WithTimeout(contextVar, 30*time.Second) // timeout 값 설정
+	contextVar, cancelFunc = context.WithTimeout(contextVar, 30*time.Second) // timeout 값을 설정
+	defer cancelFunc()
+	contextVar, cancelFunc = cdp.NewContext(contextVar)
 	defer cancelFunc()
 
-	var res string
+	var strVar string
 
-	err := chromedp.Run(contextVar, submit("원규진", "20232192142523_62886034", &res))
+	err := cdp.Run(contextVar,
+		cdp.Navigate(url),
+		cdp.WaitVisible(selissu),
+		cdp.SendKeys(selname, username),
+		cdp.SendKeys(selissu, issuenumber),
+		cdp.Submit(selissu),
+		cdp.WaitVisible(restitle),
+		cdp.Text(restitle, &strVar, cdp.NodeVisible),
+	)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(res)
+
+	fmt.Println(strVar)
+
 }
 
-func submit(userName string, issueNumber string, res *string) chromedp.Tasks {
-	return chromedp.Tasks{
-		chromedp.Navigate(`https://www.1365.go.kr/vols/P9330/srvcgud/cnfrmnIssu.do`),
-		chromedp.WaitVisible(`//input[@name="schVltrNm"]`),
-		chromedp.SendKeys(`//input[@name="schVltrNm"]`, userName),
-		chromedp.WaitVisible(`//input[@name="schIssuNo"]`),
-		chromedp.SendKeys(`//input[@name="schIssuNo"]`, issueNumber),
-		chromedp.Submit(`//input[@name="schVltrNm"]`),
-		chromedp.Submit(`//input[@name="schIssuNo"]`),
-		chromedp.WaitVisible(`//div[contains(@class, "null"]`),
-		chromedp.Text(`(//*//ul[contains(@class, "repo-list")]/li[1]//p)[1]`, res),
-		chromedp.Text(`//div[contains(@class, "null"]`, res),
-	}
+func main() {
+	const url = "https://www.1365.go.kr/vols/P9330/srvcgud/cnfrmnIssu.do"
+	const userName = "원규진"
+	const userIssueNumber = "20232192142523_62886034"
+	sendRequest(url, userName, userIssueNumber)
 }
