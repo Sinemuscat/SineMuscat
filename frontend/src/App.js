@@ -13,6 +13,7 @@ import ManageCertificationsPage from './pages/ManageCertificationsPage';
 import UsePointsPage from './pages/UsePointsPage';
 import EditUserInfoPage from './pages/EditUserInfoPage';
 import CreateCertificationsPage from './pages/CreateCertificationsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/managecertifications" element={<ManageCertificationsPage />} />
             <Route path="/edituserinfo" element={<EditUserInfoPage />} />
             <Route path="/createcertifications" element={<CreateCertificationsPage />} />
+            <Route path="/productdetail" element={<ProductDetailPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
