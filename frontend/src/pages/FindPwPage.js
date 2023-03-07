@@ -100,7 +100,8 @@ const Body = styled(Stack)(() => ({
     position: 'relative',
     left: '50%',
     transform: 'translate(-50%, 0)', 
-    marginTop: 20,
+    marginTop: 10,
+    paddingBottom: 80,
 }));
 
 const CustomStack = styled(Stack)(() => ({

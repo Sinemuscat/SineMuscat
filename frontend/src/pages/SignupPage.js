@@ -10,6 +10,7 @@ function SignupPage() {
     const [step, setStep] = useState(true);
     const [gender, setGender] = useState('male');
     const [email, setEmail] = React.useState('');
+    const [wallet, setWallet] = useState(false);
     
     const navigate = useNavigate();
     const onClickSetStep = () => {
@@ -22,6 +23,10 @@ function SignupPage() {
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
+    };
+
+    const onClickWallet = () => {
+        setWallet(!wallet);
     };
 
     return (
@@ -142,11 +147,16 @@ function SignupPage() {
                             </Select>
                         </ItemStack>
                         <ItemStack direction="row" alignItems='center'>
+                            <ItemTitle>지갑 연결</ItemTitle>
+                            <WalletButton variant={'outlined'} onClick={onClickWallet}>
+                                {wallet ? '연결되었습니다' : 'Metamask 지갑 연결'}
+                            </WalletButton>
+                        </ItemStack>
+                        <ItemStack direction="row" alignItems='center' sx={{height: '35px'}}>
                             <ItemTitle>지갑 주소</ItemTitle>
-                            <TextField 
-                                size="small" 
-                                inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
-                            />
+                            <Box sx={{color: 'grey', fontSize: 14}}>
+                                {wallet ? '0x7b429862aF4cF39881d07dC3eF524E76E16658aC' : ''}
+                            </Box>
                         </ItemStack>
                     </Stack>
                     <SignupButton>가입</SignupButton>
@@ -271,12 +281,20 @@ const NumberField = styled(TextField)(() => ({
     width: 60,
 }));
 
+const WalletButton = styled(Button)({
+    width: 200, 
+    fontFamily: 'PretendardL',
+    fontSize: 13,
+    color: '#0094FF',
+    border: '1px solid #0094FF',
+});
+
 const SignupButton = styled(Button)(() => ({
     position: 'relative',
     left: '50%',
     transform: 'translate(-50%, 0)', 
     width: 150,
-    marginTop: 100,
+    marginTop: 80,
     padding: 10,
     fontFamily: 'PretendardM', 
     fontSize: 16, 

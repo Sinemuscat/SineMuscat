@@ -35,6 +35,13 @@ function LoginPage() {
                     inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                     InputLabelProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                 />
+                <TextField 
+                    fullWidth 
+                    label="지갑 주소"
+                    margin="dense"
+                    inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
+                    InputLabelProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
+                />
                 <LoginButton>로그인</LoginButton>
                 <SubGrid container justifyContent='space-between'>
                     <SubButton onClick={onClickSignup}>회원가입</SubButton>
@@ -60,6 +67,7 @@ const Body = styled(Box)(() => ({
     left: '50%',
     width: 320,
     marginTop: 10,
+    paddingBottom: 80,
     transform: 'translate(-50%, 0)', 
 }));
 

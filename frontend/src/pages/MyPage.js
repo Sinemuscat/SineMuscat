@@ -31,7 +31,7 @@ function MyPage() {
             <Body container spacing={2}>
                 <Grid item xs={6} alignItems="center">
                     <Item alignItems="center" spacing={2}>
-                        <Avatar sx={{width: 80, height: 80, backgroundColor: '#6323BD', fontSize: 40}}>GJ</Avatar>
+                        <Avatar sx={{width: 80, height: 80, backgroundColor: '#6323BD', fontSize: 40}}>규진</Avatar>
                         <Stack direction="row" alignItems="end">
                             <Box sx={{fontSize: 30, fontFamily: 'PretendardB'}}>원규진</Box>
                             <Box sx={{fontSize: 20, margin: '0 0 1px 5px', fontFamily: 'PretendardB'}}>님</Box>
@@ -117,6 +117,7 @@ const Body = styled(Grid)(() => ({
     transform: 'translate(-50%, 0)', 
     width: 800,
     padding: 10,
+    paddingBottom: 80,
 }));
 
 const Item = styled(Stack)(() => ({

@@ -7,10 +7,16 @@ import Error from '@mui/icons-material/WarningRounded';
 
 function CreateCertModal() {
     const [open, setOpen] = useState(false);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(true);
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+        setError(!error);
+    }
 
     return (
         <>
