@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, TextField, Stack, ToggleButton, ToggleButtonGroup, Select, MenuItem } from '@mui/material';
@@ -22,9 +23,28 @@ function EditUserInfoPage() {
         setEmail(event.target.value);
     };
 
-    const onClickWallet = () => {
-        setWallet(!wallet);
+    /****** Edit by Hyeyeon *******/
+    const onClickWallet = async () => {
+      if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+        try {
+          /* MetaMask is installed */
+          const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          setWallet(accounts[0]);
+          console.log(accounts[0]);
+        } catch (err) {
+          console.error(err.message);
+        }
+      } else {
+        /* MetaMask is not installed */
+        alert("Please install MetaMask");
+      }
     };
+
+    //const onClickWallet = () => {
+    //    setWallet(!wallet);
+    //};
 
     return (
         <>
@@ -129,13 +149,13 @@ function EditUserInfoPage() {
                     <ItemStack direction="row" alignItems='center'>
                         <ItemTitle>지갑 연결</ItemTitle>
                         <WalletButton variant={'outlined'} onClick={onClickWallet}>
-                            {wallet ? '연결되었습니다' : 'Metamask 지갑 연결'}
+                        {wallet && wallet.length > 0 ? '연결되었습니다' : 'Metamask 지갑 연결'}
                         </WalletButton>
                     </ItemStack>
                     <ItemStack direction="row" alignItems='center' sx={{height: '35px'}}>
                         <ItemTitle>지갑 주소</ItemTitle>
                         <Box sx={{color: 'grey', fontSize: 14}}>
-                            {wallet ? '0x7b429862aF4cF39881d07dC3eF524E76E16658aC' : ''}
+                            {wallet && wallet.length > 0 ? `${wallet.substring()}` : ''}
                         </Box>
                     </ItemStack>
                 </Stack>
