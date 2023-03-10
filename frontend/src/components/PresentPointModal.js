@@ -59,11 +59,12 @@ function PresendPointModal() {
                 <Body alignItems='center' spacing={2}>
                     <CloseButton onClick={handleClose} title="닫기" />
                     <Title>포인트 선물</Title>
-                    <form alignItems='center' onSubmit={handleSubmit}>
+                    {/* <form alignItems='center' onSubmit={handleSubmit}> */}
+                    <Stack>
                         <Stack spacing={2}>
                             <SubTitle>받는 사람</SubTitle>
                             <Avatar />
-                            <input 
+                            <TextField 
                                 type="text"
                                 id="received"
                                 size="small" 
@@ -72,9 +73,9 @@ function PresendPointModal() {
                                 placeholder="받는 사람 아이디를 입력해주세요."
                             />
                         </Stack>
-                        <Stack spacing={2} mt={5}>
+                        <Stack spacing={2} mt={4}>
                             <SubTitle>선물할 포인트</SubTitle>
-                            <input
+                            <TextField
                                 type="number" 
                                 id="amount"
                                 size="small" 
@@ -87,9 +88,9 @@ function PresendPointModal() {
                                 helperText="선물 가능 포인트 : 2,000 Points"
                             />
                         </Stack>
-                        <input type="submit" value="선물하기"></input>
-
-                    </form>
+                        <PresentButton onClick={handleSubmit}>선물하기</PresentButton>
+                    </Stack>
+                    {/* </form> */}
                 </Body>
             </Modal>
         </>
@@ -148,7 +149,7 @@ const CustomButton = styled(Button)(() => ({
 const PresentButton = styled(Button)(() => ({
     width: 250,
     padding: 10,
-    marginTop: 80,
+    marginTop: 50,
     fontFamily: 'PretendardM', 
     fontSize: 16, 
     boxShadow: 'none', 
