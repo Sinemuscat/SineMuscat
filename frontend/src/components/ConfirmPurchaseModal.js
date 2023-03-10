@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, Modal, Stack, Checkbox } from '@mui/material'
@@ -9,6 +10,12 @@ import Arrow from '@mui/icons-material/KeyboardDoubleArrowRightRounded';
 function ConfirmPurchaseModal() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
+    const [wallet, setWallet] = useState("");
+    const [balanceInEther, setBalanceInEther] = useState("");
+
+    useEffect(() => {
+      getCurrentWalletBalance();
+    }, [wallet]);
 
     const handleOpen = () => {
         setOpen(true);
@@ -23,6 +30,29 @@ function ConfirmPurchaseModal() {
 
     const onClickPurchase = () => {
         navigate('/puchaseresult');
+    };
+
+    const web3 = new Web3(window.ethereum);
+    const getCurrentWalletBalance = async () => {
+      if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+        try {
+          const accounts = await window.ethereum.request({
+            method: "eth_accounts",
+          });
+          if (accounts.length > 0) {
+            const address = accounts[0];
+            const balanceInWei = await web3.eth.getBalance(address);
+            const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+            setBalanceInEther(balanceInEther);
+            console.log(`Wallet address: ${address}`);
+            console.log(`Balance in ether: ${balanceInEther}`);
+          } else {
+            console.log("No wallet connected.");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
     };
 
     return (
@@ -44,7 +74,7 @@ function ConfirmPurchaseModal() {
                         <Stack direction="row" spacing={1} alignItems="center" py={1}>
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>보유 Points</SubTitle>
-                                <SubContent sx={{color: 'grey'}}>2500 Points</SubContent>
+                                <SubContent sx={{color: 'grey'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000 + "" : ""}  Points</SubContent>
                             </PointChange>
                             <Minus />
                             <PointChange spacing={0.5}>
