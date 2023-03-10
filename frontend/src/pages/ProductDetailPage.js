@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button } from '@mui/material';
 import Header from '../components/Header';
+import ConfirmPurchaseModal from '../components/ConfirmPurchaseModal';
 
 function ProductDetailPage() {
     const [price, setPrice] = useState(250);
@@ -52,7 +52,7 @@ function ProductDetailPage() {
                                     <DetailContent sx={{fontFamily: 'PretendardM'}}>{price*count} Points</DetailContent>
                                 </Stack>
                             </Stack>
-                            <PurchaseButton>구매하기</PurchaseButton>
+                            <ConfirmPurchaseModal />
                         </Stack>
                     </Grid>
                 </Grid>
@@ -102,22 +102,6 @@ const CountButton = styled(Button)(() => ({
     minWidth: 0,
     border: '1px solid #D0D0D0',
     borderRadius: 50,
-}));
-
-const PurchaseButton = styled(Button)(() => ({
-    position: 'relative',
-    left: '50%',
-    transform: 'translate(-50%, 0)', 
-    width: '100%',
-    padding: 12,
-    fontFamily: 'PretendardM', 
-    fontSize: 16, 
-    boxShadow: 'none', 
-    color: 'white',
-    backgroundColor: '#0094FF', 
-    '&:hover': {
-        backgroundColor: '#34ABFF',
-    },
 }));
 
 export default ProductDetailPage;

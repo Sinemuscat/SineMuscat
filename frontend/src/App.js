@@ -14,6 +14,7 @@ import UsePointsPage from './pages/UsePointsPage';
 import EditUserInfoPage from './pages/EditUserInfoPage';
 import CreateCertificationsPage from './pages/CreateCertificationsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import PurchaseResultPage from './pages/PurchaseResultPage';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/edituserinfo" element={<EditUserInfoPage />} />
             <Route path="/createcertifications" element={<CreateCertificationsPage />} />
             <Route path="/productdetail" element={<ProductDetailPage />} />
+            <Route path="/puchaseresult" element={<PurchaseResultPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

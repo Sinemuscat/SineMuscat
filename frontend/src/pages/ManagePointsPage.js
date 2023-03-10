@@ -8,37 +8,43 @@ import Header from '../components/Header';
 import PresendPointModal from '../components/PresentPointModal';
 
 function ManagePointsPage() {
-  const [wallet, setWallet] = useState("");
-  const [balanceInEther, setBalanceInEther] = useState("");
+    const [wallet, setWallet] = useState("");
+    const [balanceInEther, setBalanceInEther] = useState("");
 
-  useEffect(() => {
-    getCurrentWalletBalance();
-  }, [wallet]);
+    useEffect(() => {
+      getCurrentWalletBalance();
+    }, [wallet]);
 
-  const web3 = new Web3(window.ethereum);
-  const getCurrentWalletBalance = async () => {
-    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_accounts",
-        });
-        if (accounts.length > 0) {
-          const address = accounts[0];
-          const balanceInWei = await web3.eth.getBalance(address);
-          const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
-          setBalanceInEther(balanceInEther);
-          console.log(`Wallet address: ${address}`);
-          console.log(`Balance in ether: ${balanceInEther}`);
-        } else {
-          console.log("No wallet connected.");
+    const web3 = new Web3(window.ethereum);
+    const getCurrentWalletBalance = async () => {
+      if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+        try {
+          const accounts = await window.ethereum.request({
+            method: "eth_accounts",
+          });
+          if (accounts.length > 0) {
+            const address = accounts[0];
+            const balanceInWei = await web3.eth.getBalance(address);
+            const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+            setBalanceInEther(balanceInEther);
+            console.log(`Wallet address: ${address}`);
+            console.log(`Balance in ether: ${balanceInEther}`);
+          } else {
+            console.log("No wallet connected.");
+          }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
+      } else {
+        console.log("Please install MetaMask.");
       }
-    } else {
-      console.log("Please install MetaMask.");
-    }
-  };
+    };
+
+    const navigate = useNavigate();
+
+    const onClickUsePoints = () => {
+        navigate('/usepoints');
+    };
 
     return (
         <>
@@ -68,7 +74,7 @@ function ManagePointsPage() {
                     <Grid xs={3} item>
                         <Banner>
                             <Box sx={{height: 150}}></Box>
-                            <CustomButton variant="contained">물품 구매하기</CustomButton>
+                            <CustomButton onClick={onClickUsePoints} variant="contained">물품 구매하기</CustomButton>
                         </Banner>
                     </Grid>
                 </Grid>
