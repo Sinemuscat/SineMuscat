@@ -59,8 +59,7 @@ function PresendPointModal() {
                 <Body alignItems='center' spacing={2}>
                     <CloseButton onClick={handleClose} title="닫기" />
                     <Title>포인트 선물</Title>
-                    {/* <form alignItems='center' onSubmit={handleSubmit}> */}
-                    <Stack>
+                    <form alignItems='center' onSubmit={handleSubmit}>
                         <Stack spacing={2}>
                             <SubTitle>받는 사람</SubTitle>
                             <Avatar />
@@ -88,9 +87,8 @@ function PresendPointModal() {
                                 helperText="선물 가능 포인트 : 2,000 Points"
                             />
                         </Stack>
-                        <PresentButton onClick={handleSubmit}>선물하기</PresentButton>
-                    </Stack>
-                    {/* </form> */}
+                        <PresentButton type="submit">선물하기</PresentButton>
+                    </form>
                 </Body>
             </Modal>
         </>
