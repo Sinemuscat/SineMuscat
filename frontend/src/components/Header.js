@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
+import Web3 from 'web3';
 import { Box, Stack, Avatar, Button } from '@mui/material';
 
 function Header() {
     const [login, setLogin] = useState(true);
     const navigate = useNavigate();
+    const [wallet, setWallet] = useState("");
+    const [balanceInEther, setBalanceInEther] = useState("");
+
+    useEffect(() => {
+      getCurrentWalletBalance();
+    }, [wallet]);
     
     const onClickHome = () => {
         navigate('/');
@@ -39,6 +46,29 @@ function Header() {
         navigate('/managepoints');
     };
 
+    const web3 = new Web3(window.ethereum);
+    const getCurrentWalletBalance = async () => {
+      if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+        try {
+          const accounts = await window.ethereum.request({
+            method: "eth_accounts",
+          });
+          if (accounts.length > 0) {
+            const address = accounts[0];
+            const balanceInWei = await web3.eth.getBalance(address);
+            const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+            setBalanceInEther(balanceInEther);
+            console.log(`Wallet address: ${address}`);
+            console.log(`Balance in ether: ${balanceInEther}`);
+          } else {
+            console.log("No wallet connected.");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+
     return (
         <>
             <Frame>
@@ -47,7 +77,7 @@ function Header() {
                     <Stack direction="row" spacing={5}>
                         <Box><Menu onClick={onClickCert}>봉사 인증서 관리</Menu></Box>
                         <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
-                        <Box><Menu onClick={onClickManagePoints}>2000 Points</Menu></Box>
+                        <Box><Menu onClick={onClickManagePoints}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000 + "" : ""} Points</Menu></Box> 
                         <CustomAvatar onClick={onClickUser1} />
                         <LoginAvatar onClick={onClickUser2}>규진</LoginAvatar>
                         {/* {
