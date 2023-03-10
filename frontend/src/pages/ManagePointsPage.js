@@ -1,4 +1,6 @@
 import React from 'react';
+import { useEffect, useState } from "react";
+import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button } from '@mui/material';
@@ -6,6 +8,38 @@ import Header from '../components/Header';
 import PresendPointModal from '../components/PresentPointModal';
 
 function ManagePointsPage() {
+  const [wallet, setWallet] = useState("");
+  const [balanceInEther, setBalanceInEther] = useState("");
+
+  useEffect(() => {
+    getCurrentWalletBalance();
+  }, [wallet]);
+
+  const web3 = new Web3(window.ethereum);
+  const getCurrentWalletBalance = async () => {
+    if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        if (accounts.length > 0) {
+          const address = accounts[0];
+          const balanceInWei = await web3.eth.getBalance(address);
+          const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+          setBalanceInEther(balanceInEther);
+          console.log(`Wallet address: ${address}`);
+          console.log(`Balance in ether: ${balanceInEther}`);
+        } else {
+          console.log("No wallet connected.");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      console.log("Please install MetaMask.");
+    }
+  };
+
     return (
         <>
             <Header />
@@ -15,7 +49,7 @@ function ManagePointsPage() {
                     <Grid xs={6} item pt={2} pl={1}>
                         <Box sx={{fontFamily: 'PretendardM', fontSize: '18px'}}>현재 포인트</Box>
                         <Stack direction="row" alignItems="end" my={1}>
-                            <Box sx={{fontFamily: 'PretendardB', fontSize: '60px'}}>2,500</Box>
+                            <Box sx={{fontFamily: 'PretendardB', fontSize: '60px'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000: ""}</Box>
                             <Box sx={{fontFamily: 'PretendardM',fontSize: '24px', padding: '0 0 8px 10px'}}>점</Box>
                         </Stack>
                         <Box sx={{fontSize: '12px', color: 'grey', paddingTop: 4, lineHeight: 1.4}}>

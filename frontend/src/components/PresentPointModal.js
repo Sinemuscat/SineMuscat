@@ -1,14 +1,57 @@
 import React, {useState} from 'react';
+import Web3 from "web3";
 import { styled } from '@mui/material/styles';
 import { Box, Button, Modal, Stack, Avatar, TextField, InputAdornment } from '@mui/material'
 import Close from "@mui/icons-material/CloseRounded";
 
 function PresendPointModal() {
     const [open, setOpen] = useState(false);
+    const [wallet, setWallet] = useState("");
+    const [balanceInEther, setBalanceInEther] = useState("");
+    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const onClickWallet = async () => {
+      if (typeof window != "undefined" && typeof window.ethereum != "undefined") {
+        try {
+          /* MetaMask is installed */
+          const accounts = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          setWallet(accounts[0]);
+          console.log(accounts[0]);
+        } catch (err) {
+          console.error(err.message);
+        }
+      } else {
+        /* MetaMask is not installed */
+        alert("Please install MetaMask");
+      }
+    };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+    
+      // Connect the wallet
+      await onClickWallet();
+
+      // Check if wallet is connected
+      if (wallet === '') {
+        console.log('Wallet not connected');
+        return;
+      }
+    
+       // Send transaction
+       await web3.eth.sendTransaction({
+        from: wallet,
+        to: wallet,
+        value: web3.utils.toWei(e.target.amount.value, 'ether'),
+      });
+    };
+
+    
     return (
         <>
             <CustomButton variant="contained" onClick={handleOpen}>포인트 선물하기</CustomButton>
@@ -16,11 +59,13 @@ function PresendPointModal() {
                 <Body alignItems='center' spacing={2}>
                     <CloseButton onClick={handleClose} title="닫기" />
                     <Title>포인트 선물</Title>
-                    <Stack alignItems='center'>
+                    <form alignItems='center' onSubmit={handleSubmit}>
                         <Stack spacing={2}>
                             <SubTitle>받는 사람</SubTitle>
                             <Avatar />
-                            <TextField 
+                            <input 
+                                type="text"
+                                id="received"
                                 size="small" 
                                 sx={{width: 250}}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
@@ -29,7 +74,9 @@ function PresendPointModal() {
                         </Stack>
                         <Stack spacing={2} mt={5}>
                             <SubTitle>선물할 포인트</SubTitle>
-                            <TextField 
+                            <input
+                                type="number" 
+                                id="amount"
                                 size="small" 
                                 sx={{width: 250}}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
@@ -40,8 +87,9 @@ function PresendPointModal() {
                                 helperText="선물 가능 포인트 : 2,000 Points"
                             />
                         </Stack>
-                        <PresentButton>선물하기</PresentButton>
-                    </Stack>
+                        <input type="submit" value="선물하기"></input>
+
+                    </form>
                 </Body>
             </Modal>
         </>
