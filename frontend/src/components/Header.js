@@ -4,6 +4,8 @@ import { styled } from '@mui/material/styles';
 import Web3 from 'web3';
 import { Box, Stack, Avatar, Button } from '@mui/material';
 
+import User from '../data/User';
+
 function Header() {
     const [login, setLogin] = useState(true);
     const navigate = useNavigate();
@@ -79,7 +81,7 @@ function Header() {
                         <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
                         <Box><Menu onClick={onClickManagePoints}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000 + "" : ""} Points</Menu></Box> 
                         <CustomAvatar onClick={onClickUser1} />
-                        <LoginAvatar onClick={onClickUser2}>규진</LoginAvatar>
+                        <LoginAvatar onClick={onClickUser2}>{User.name.substring(1,3)}</LoginAvatar>
                         {/* {
                             login ? 
                             <LoginAvatar onClick={onClickUser}>규진</LoginAvatar> :

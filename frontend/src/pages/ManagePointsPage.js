@@ -7,6 +7,8 @@ import { Box, Grid, Stack, Button } from '@mui/material';
 import Header from '../components/Header';
 import PresendPointModal from '../components/PresentPointModal';
 
+import User from '../data/User';
+
 function ManagePointsPage() {
     const [wallet, setWallet] = useState("");
     const [balanceInEther, setBalanceInEther] = useState("");
@@ -89,31 +91,17 @@ function ManagePointsPage() {
                         <ListHeader item xs={8.5}>적립 구분</ListHeader>
                         <ListHeader item xs={2}>적립 날짜</ListHeader>
                     </Grid>
-                    <ListItem container>
-                        <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>+ 2 Points</ListSubItem>
-                        <ListSubItem item xs={8.5}>1365 인증서 발급 (20231251415508_12854036)</ListSubItem>
-                        <ListSubItem item xs={2}>2023-01-25</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>+ 1 Points</ListSubItem>
-                        <ListSubItem item xs={8.5}>VMS 인증서 발급 (20231251415508_12854036)</ListSubItem>
-                        <ListSubItem item xs={2}>2023-01-23</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>- 200 Points</ListSubItem>
-                        <ListSubItem item xs={8.5}>PPP 님께 포인트 보내기</ListSubItem>
-                        <ListSubItem item xs={2}>2023-01-20</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>+ 150 Points</ListSubItem>
-                        <ListSubItem item xs={8.5}>QQQ 님께 포인트 받기</ListSubItem>
-                        <ListSubItem item xs={2}>2023-01-19</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>+ 3 Points</ListSubItem>
-                        <ListSubItem item xs={8.5}>1365 인증서 발급 (20231251415508_12854036)</ListSubItem>
-                        <ListSubItem item xs={2}>2023-01-12</ListSubItem>
-                    </ListItem>
+                    {
+                        User.pointList.map((value, idx) => {
+                            return (
+                                <ListItem container>
+                                    <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>{value.point} Points</ListSubItem>
+                                    <ListSubItem item xs={8.5}>{value.content}</ListSubItem>
+                                    <ListSubItem item xs={2}>{value.date.substring(0,4)}-{value.date.substring(4,6)}-{value.date.substring(6,8)}</ListSubItem>
+                                </ListItem>
+                            )
+                        })
+                    }
                     <Stack direction="row" justifyContent='center' mt={2}>
                         <Box sx={{padding: '20px', color: '#0094FF'}}>1</Box>
                         <Box sx={{padding: '20px'}}>2</Box>

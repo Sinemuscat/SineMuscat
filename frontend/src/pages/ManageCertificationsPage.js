@@ -5,6 +5,8 @@ import { Box, Grid, Stack, Button, TextField } from '@mui/material';
 import KeyboardDoubleArrowDownRoundedIcon from '@mui/icons-material/KeyboardDoubleArrowDownRounded';
 import Header from '../components/Header';
 
+import User from '../data/User';
+
 function ManageCertificationsPage() {
     const navigate = useNavigate();
 
@@ -44,7 +46,7 @@ function ManageCertificationsPage() {
                     <Grid item xs={6}>
                         <ResultTitle>사용 가능 포인트</ResultTitle>
                         <Stack direction="row" alignItems="end" mt={1}>
-                            <Box sx={{fontFamily: 'PretendardM', fontSize: 66}}>2,500</Box>
+                            <Box sx={{fontFamily: 'PretendardM', fontSize: 66}}>{User.totalPoints}</Box>
                             <Box sx={{fontSize: 24, padding: '0 0 2px 10px'}}>Points</Box>
                         </Stack>
                     </Grid>
@@ -52,16 +54,16 @@ function ManageCertificationsPage() {
                         <Stack direction="row" alignItems="center">
                             <ResultTitle>총 봉사 횟수</ResultTitle>
                             <Stack direction="row" alignItems="end">
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>129</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{User.certificationList.length}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 0 4px 4px'}}>회</Box>
                             </Stack>
                         </Stack>
                         <Stack direction="row" alignItems="center" mt={2}>
                             <ResultTitle>총 봉사 시간</ResultTitle>
                             <Stack direction="row" alignItems="end">
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>241</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 10px 4px 4px'}}>시간</Box>
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>20</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 0 4px 4px'}}>분</Box>
                             </Stack>
                         </Stack>
@@ -73,67 +75,24 @@ function ManageCertificationsPage() {
                         <Grid item xs={9} sx={{padding: '10px'}}>인증서 내용</Grid>
                         <Grid item xs={2} sx={{padding: '10px'}}>포인트</Grid>
                     </Grid>
-
-                    <ListItem container>
-                        <ListSubItem item xs={1}>129</ListSubItem>
-                        <Grid item xs={9} sx={{padding: '10px'}}>
-                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
-                            <Grid container>
-                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
-                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
-                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
-                            </Grid>
-                        </Grid>
-                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1}>128</ListSubItem>
-                        <Grid item xs={9} sx={{padding: '10px'}}>
-                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
-                            <Grid container>
-                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
-                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
-                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
-                            </Grid>
-                        </Grid>
-                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1}>127</ListSubItem>
-                        <Grid item xs={9} sx={{padding: '10px'}}>
-                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
-                            <Grid container>
-                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
-                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
-                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
-                            </Grid>
-                        </Grid>
-                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1}>126</ListSubItem>
-                        <Grid item xs={9} sx={{padding: '10px'}}>
-                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
-                            <Grid container>
-                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
-                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
-                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
-                            </Grid>
-                        </Grid>
-                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
-                    </ListItem>
-                    <ListItem container>
-                        <ListSubItem item xs={1}>125</ListSubItem>
-                        <Grid item xs={9} sx={{padding: '10px'}}>
-                            <Box sx={{fontFamily: 'PretendardM'}}>ABCD1234</Box>
-                            <Grid container>
-                                <Grid item xs={4}>봉사일자 : 2017-08-01</Grid>
-                                <Grid item xs={4}>발급일자 : 2017-08-29</Grid>
-                                <Grid item xs={4}>봉사시간 : 4시간 0분</Grid>
-                            </Grid>
-                        </Grid>
-                        <ListSubItem item xs={2} sx={{color: '#0094FF'}}>1 Point</ListSubItem>
-                    </ListItem>
+                    {
+                        User.certificationList.map((value, idx) => {
+                            return (
+                                <ListItem container>
+                                    <ListSubItem item xs={1}>{value.id}</ListSubItem>
+                                    <Grid item xs={9} sx={{padding: '10px'}}>
+                                        <Box sx={{fontFamily: 'PretendardM'}}>{value.content}</Box>
+                                        <Grid container>
+                                            <Grid item xs={4}>봉사일자 : {value.volunteerDate.substring(0,4)}-{value.volunteerDate.substring(4,6)}-{value.volunteerDate.substring(6,8)}</Grid>
+                                            <Grid item xs={4}>발급일자 : {value.submitDate.substring(0,4)}-{value.submitDate.substring(4,6)}-{value.submitDate.substring(6,8)}</Grid>
+                                            <Grid item xs={4}>봉사시간 : {value.hour}시간 {}분</Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <ListSubItem item xs={2} sx={{color: '#0094FF'}}>{value.point} Point</ListSubItem>
+                                </ListItem>
+                            )
+                        })
+                    }
                     <Stack direction="row" justifyContent='center' mt={2}>
                         <Box sx={{padding: '20px', color: '#0094FF'}}>1</Box>
                         <Box sx={{padding: '20px'}}>2</Box>

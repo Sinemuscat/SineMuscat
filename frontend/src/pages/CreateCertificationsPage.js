@@ -9,7 +9,7 @@ import CreateCertModal from '../components/CreateCertModal';
 import Refresh from '@mui/icons-material/RefreshRounded';
 
 function CreateCertificationsPage() {
-    const [option, setOption] = useState(true);
+    const [option, setOption] = useState(false);
 
     const onClickButton1 = () => {
         setOption(true);
@@ -31,14 +31,14 @@ function CreateCertificationsPage() {
                 </Box>
                 <Box sx={{border: '1px solid lightgrey', width: 300, textAlign: 'center', lineHeight: 5}}>예시 그림</Box>
                 <InputStack spacing={3}>
-                    <Stack direction="row" spacing={2}>
+                    {/* <Stack direction="row" spacing={2}>
                         <OptionButton onClick={onClickButton1} sx={{border: option ? '2px solid purple' : '2px solid lightgrey', opacity: option ? '100%' : '60%'}}>
                             <img src={logoVMS} width={120} alt="img1"/>
                         </OptionButton>
                         <OptionButton onClick={onClickButton2} sx={{border: option ? '2px solid lightgrey' : '2px solid orange', opacity: option ? '60%' : '100%'}}>
                             <img src={logo1365} width={120} alt="img2"/>
                         </OptionButton>
-                    </Stack>
+                    </Stack> */}
                     <Stack direction="row" spacing={1} alignItems="center">
                         <Box sx={{paddingRight: 1, fontSize: '14px'}}>인증서 발급번호</Box>
                         {

@@ -35,13 +35,13 @@ function LoginPage() {
                     inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                     InputLabelProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                 />
-                <TextField 
+                {/* <TextField 
                     fullWidth 
                     label="지갑 주소"
                     margin="dense"
                     inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                     InputLabelProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
-                />
+                /> */}
                 <LoginButton>로그인</LoginButton>
                 <SubGrid container justifyContent='space-between'>
                     <SubButton onClick={onClickSignup}>회원가입</SubButton>

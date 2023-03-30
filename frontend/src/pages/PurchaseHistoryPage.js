@@ -4,6 +4,8 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button } from '@mui/material';
 import Header from '../components/Header';
 
+import User from '../data/User';
+
 function PurchaseHistoryPage() {
     return (
         <>
@@ -11,7 +13,32 @@ function PurchaseHistoryPage() {
             <Title>구매내역 조회</Title>
             <Body>
                 <Badge sx={{width: '55px'}}>미사용</Badge>
-                <HistoryStack container>
+                {
+                    User.purchaseList.map((value, idx) => {
+                        if (value.isUsed===false)
+                            return (
+                                <HistoryStack container>
+                                    <Grid item xs={2}>
+                                        <ProductImg />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <ProductDetail justifyContent="space-between">
+                                            <Stack spacing={0.5}>
+                                                <Brand>{value.productInfo.brand}</Brand>
+                                                <ProductName>{value.productInfo.productName}</ProductName>
+                                            </Stack>
+                                            <Date>{value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 구매 / {value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 까지</Date>
+                                        </ProductDetail>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Status>사용 완료</Status>
+                                    </Grid>
+                                </HistoryStack>
+                            )
+                        else return <></>
+                    })
+                }
+                {/* <HistoryStack container>
                     <Grid item xs={2}>
                         <ProductImg />
                     </Grid>
@@ -27,30 +54,53 @@ function PurchaseHistoryPage() {
                     <Grid item xs={2}>
                         <Status>사용 전</Status>
                     </Grid>
-                </HistoryStack>
+                </HistoryStack> */}
                 <Badge sx={{width: '165px'}}>사용완료 및 유효기간 만료</Badge>
                 {
-                    [0,0,0,0,0,0].map(() => {
-                        return (
-                            <HistoryStack container>
-                                <Grid item xs={2}>
-                                    <ProductImg />
-                                </Grid>
-                                <Grid item xs={8}>
-                                    <ProductDetail justifyContent="space-between">
-                                        <Stack spacing={0.5}>
-                                            <Brand sx={{color: 'lightgrey'}}>CU</Brand>
-                                            <ProductName sx={{color: 'lightgrey'}}>츄파춥스</ProductName>
-                                        </Stack>
-                                        <Date sx={{color: 'lightgrey'}}>2021-02-01 구매 / 2022-02-01 까지</Date>
-                                    </ProductDetail>
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Status sx={{color: 'lightgrey'}}>사용 완료</Status>
-                                </Grid>
-                            </HistoryStack>
-                        )
+                    User.purchaseList.map((value, idx) => {
+                        if (value.isUsed===true)
+                            return (
+                                <HistoryStack container>
+                                    <Grid item xs={2}>
+                                        <ProductImg />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <ProductDetail justifyContent="space-between">
+                                            <Stack spacing={0.5}>
+                                                <Brand sx={{color: 'lightgrey'}}>{value.productInfo.brand}</Brand>
+                                                <ProductName sx={{color: 'lightgrey'}}>{value.productInfo.productName}</ProductName>
+                                            </Stack>
+                                            <Date sx={{color: 'lightgrey'}}>{value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 구매 / {value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 까지</Date>
+                                        </ProductDetail>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Status sx={{color: 'lightgrey'}}>사용 완료</Status>
+                                    </Grid>
+                                </HistoryStack>
+                            )
+                            else return <></>
                     })
+                    // [0,0,0,0,0,0].map(() => {
+                    //     return (
+                    //         <HistoryStack container>
+                    //             <Grid item xs={2}>
+                    //                 <ProductImg />
+                    //             </Grid>
+                    //             <Grid item xs={8}>
+                    //                 <ProductDetail justifyContent="space-between">
+                    //                     <Stack spacing={0.5}>
+                    //                         <Brand sx={{color: 'lightgrey'}}>CU</Brand>
+                    //                         <ProductName sx={{color: 'lightgrey'}}>츄파춥스</ProductName>
+                    //                     </Stack>
+                    //                     <Date sx={{color: 'lightgrey'}}>2021-02-01 구매 / 2022-02-01 까지</Date>
+                    //                 </ProductDetail>
+                    //             </Grid>
+                    //             <Grid item xs={2}>
+                    //                 <Status sx={{color: 'lightgrey'}}>사용 완료</Status>
+                    //             </Grid>
+                    //         </HistoryStack>
+                    //     )
+                    // })
                 }
             </Body>
         </>

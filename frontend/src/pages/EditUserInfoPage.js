@@ -7,9 +7,18 @@ import PhoneAndroidRoundedIcon from '@mui/icons-material/PhoneAndroidRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import Header from '../components/Header';
 
+import User from '../data/User';
+
 function EditUserInfoPage() {
-    const [gender, setGender] = useState('female');
+    const [id, setId] = useState(User.id);
+    const [password, setPassword] = useState(User.password);
+    const [passwordC, setPasswordC] = useState('');
+    const [name, setName] = useState(User.name);
+    const [gender, setGender] = useState(User.gender);
+    const [phoneNumber, setPhoneNumber] = useState(User.phoneNumber);
+    const [emailInput, setEmailInput] = React.useState(User.email);
     const [email, setEmail] = React.useState('');
+    const [walletAddress, setWalletAddress] = useState(User.walletAddress);
     const [wallet, setWallet] = useState(true);
 
     
@@ -57,7 +66,7 @@ function EditUserInfoPage() {
                         <ItemTitle>아이디</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue="dnjsrbwls"
+                            defaultValue={id}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <CheckButton disabled>중복 확인</CheckButton>
@@ -70,6 +79,7 @@ function EditUserInfoPage() {
                         <ItemTitle>비밀번호</ItemTitle>
                         <TextField 
                             size="small" 
+                            defaultValue={password}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                     </ItemStack>
@@ -77,6 +87,7 @@ function EditUserInfoPage() {
                         <ItemTitle>비밀번호 확인</ItemTitle>
                         <TextField 
                             size="small" 
+                            defaultValue={passwordC}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <CloseRoundedIcon sx={{color: 'red', marginLeft: '10px'}} />
@@ -88,7 +99,7 @@ function EditUserInfoPage() {
                         <ItemTitle>이름</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue="원규진"
+                            defaultValue={name}
                             sx={{width: 120}}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
@@ -110,19 +121,19 @@ function EditUserInfoPage() {
                         <ItemTitle>전화번호</ItemTitle>
                         <NumberField 
                             size="small"
-                            defaultValue="010"
+                            defaultValue={phoneNumber.substring(0,3)}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>-</Box>
                         <NumberField 
                             size="small" 
-                            defaultValue="2581"
+                            defaultValue={phoneNumber.substring(3,7)}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>-</Box>
                         <NumberField 
                             size="small" 
-                            defaultValue="7018"
+                            defaultValue={phoneNumber.substring(7,11)}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                     </ItemStack>
@@ -130,7 +141,7 @@ function EditUserInfoPage() {
                         <ItemTitle>이메일</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue="dnjsrbwls08"
+                            defaultValue={emailInput}
                             sx={{width: 130}}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
