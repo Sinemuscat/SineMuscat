@@ -4,10 +4,10 @@ import { styled } from '@mui/material/styles';
 import Web3 from 'web3';
 import { Box, Stack, Avatar, Button } from '@mui/material';
 
-import User from '../data/User';
+import Users from '../data/Users';
 
 function Header() {
-    const [login, setLogin] = useState(true);
+    var login = sessionStorage.getItem('userId')!==null;
     const navigate = useNavigate();
     const [wallet, setWallet] = useState("");
     const [balanceInEther, setBalanceInEther] = useState("");
@@ -28,24 +28,31 @@ function Header() {
         }
     };
 
-    const onClickUser1 = () => {
-        navigate('/login');
-    };
-
-    const onClickUser2 = () => {
-        navigate('/mypage');
-    };
-
     const onClickCert = () => {
-        navigate('/managecertifications');
+        if(login === false) {
+            alert("로그인이 필요합니다.")
+            navigate('/login');
+        } else {
+          navigate('/managecertifications');
+        }
     };
 
     const onClickUsePoints = () => {
-        navigate('/usepoints');
+        if(login === false) {
+            alert("로그인이 필요합니다.")
+            navigate('/login');
+        } else {
+          navigate('/usepoints');
+        }
     };
 
     const onClickManagePoints = () => {
-        navigate('/managepoints');
+        if(login === false) {
+            alert("로그인이 필요합니다.")
+            navigate('/login');
+        } else {
+          navigate('/managepoints');
+        }
     };
 
     const web3 = new Web3(window.ethereum);
@@ -80,13 +87,11 @@ function Header() {
                         <Box><Menu onClick={onClickCert}>봉사 인증서 관리</Menu></Box>
                         <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
                         <Box><Menu onClick={onClickManagePoints}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000 + "" : ""} Points</Menu></Box> 
-                        <CustomAvatar onClick={onClickUser1} />
-                        <LoginAvatar onClick={onClickUser2}>{User.name.substring(1,3)}</LoginAvatar>
-                        {/* {
+                        {
                             login ? 
-                            <LoginAvatar onClick={onClickUser}>규진</LoginAvatar> :
+                            <LoginAvatar onClick={onClickUser}>{Users[sessionStorage.getItem('userId')].name.substring(1,3)}</LoginAvatar> :
                             <CustomAvatar onClick={onClickUser} />
-                        } */}
+                        }
                     </Stack>
                 </Stack>
             </Frame>
@@ -133,9 +138,10 @@ const Menu = styled(Button)(() => ({
 const LoginAvatar = styled(Avatar)(() => ({
     height: 35,
     width: 35,
-    backgroundColor: '#6323BD',
+    backgroundColor: sessionStorage.getItem('userColor'),
+    fontSize: 16,
     '&:hover': {
-        backgroundColor: '#6323BDBF',
+        backgroundColor: sessionStorage.getItem('userColor')+'80',
         cursor: 'pointer'
       },
 }));

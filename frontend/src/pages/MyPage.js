@@ -5,13 +5,20 @@ import { Box, Grid, Stack, Button, Avatar } from '@mui/material';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import Header from '../components/Header';
 
-import User from '../data/User';
+import Users from '../data/Users';
 
 function MyPage() {
     const navigate = useNavigate();
     
     const onClickEdit = () => {
         navigate('/edituserinfo');
+    };
+
+    const onClickLogout = () => {
+        if(window.confirm("로그아웃 하시겠습니까?")) {
+            sessionStorage.clear()
+            navigate("/")
+        }
     };
 
     const onClickCert = () => {
@@ -33,18 +40,26 @@ function MyPage() {
             <Body container spacing={2}>
                 <Grid item xs={6} alignItems="center">
                     <Item alignItems="center" spacing={2}>
-                        <Avatar sx={{width: 80, height: 80, backgroundColor: '#6323BD', fontSize: 40}}>{User.name.substring(1,3)}</Avatar>
+                        <UserAvatar>{Users[sessionStorage.getItem('userId')].name.substring(1,3)}</UserAvatar>
                         <Stack direction="row" alignItems="end">
-                            <Box sx={{fontSize: 30, fontFamily: 'PretendardB'}}>{User.name}</Box>
-                            <Box sx={{fontSize: 20, margin: '0 0 1px 5px', fontFamily: 'PretendardB'}}>님</Box>
+                            <Box sx={{fontSize: 25, fontFamily: 'PretendardB'}}>{Users[sessionStorage.getItem('userId')].name}</Box>
+                            <Box sx={{fontSize: 16, margin: '0 0 2px 4px', fontFamily: 'PretendardB'}}>님</Box>
                         </Stack>
-                        <CustomButton onClick={onClickEdit} sx={{fontSize: 16, padding: 0}}>
-                            <Stack direction="row" alignItems="center">
-                                <Box sx={{color: 'grey'}}>회원 정보</Box>
-                                <Box sx={{color: 'black', marginLeft: '5px'}}>수정</Box>
-                                <ChevronRightRoundedIcon sx={{color: 'black'}} />
-                            </Stack>
-                        </CustomButton>
+                        <Stack>
+                            <CustomButton onClick={onClickEdit} sx={{fontSize: 16, padding: 0}}>
+                                <Stack direction="row" alignItems="center">
+                                    <Box sx={{color: 'grey'}}>회원 정보</Box>
+                                    <Box sx={{color: 'black', marginLeft: '5px'}}>수정</Box>
+                                    <ChevronRightRoundedIcon sx={{color: 'black'}} />
+                                </Stack>
+                            </CustomButton>
+                            <CustomButton onClick={onClickLogout} sx={{fontSize: 16, padding: 0}}>
+                                <Stack direction="row" alignItems="center">
+                                    <Box sx={{color: 'grey'}}>로그아웃</Box>
+                                    <ChevronRightRoundedIcon sx={{color: 'black'}} />
+                                </Stack>
+                            </CustomButton>
+                        </Stack>
                     </Item>
                 </Grid>
                 <Grid item xs={6} alignItems="center">
@@ -61,7 +76,7 @@ function MyPage() {
                         </Stack>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>가용 포인트</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{User.totalPoints} 점</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{Users[sessionStorage.getItem('userId')].totalPoints} 점</Box>
                         </Stack>
                     </Item>
                 </Grid>
@@ -75,7 +90,7 @@ function MyPage() {
                         </CustomButton>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>총 봉사 횟수</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{User.certificationList.length} 회</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{Users[sessionStorage.getItem('userId')].certificationList.length} 회</Box>
                         </Stack>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>총 봉사 시간</Box>
@@ -93,7 +108,7 @@ function MyPage() {
                         </CustomButton>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>총 구매 횟수</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{User.purchaseList.length} 회</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{Users[sessionStorage.getItem('userId')].purchaseList.length} 회</Box>
                         </Stack>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>미사용 상품</Box>
@@ -133,6 +148,13 @@ const CustomButton = styled(Button)(() => ({
         backgroundColor: 'transparent',
         opacity: '40%'
     },
+}));
+
+const UserAvatar = styled(Avatar)(() => ({
+    width: 65, 
+    height: 65, 
+    backgroundColor: sessionStorage.getItem('userColor'), 
+    fontSize: 30
 }));
 
 export default MyPage;

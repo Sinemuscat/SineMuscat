@@ -5,7 +5,7 @@ import { Box, Grid, Stack, Button, TextField } from '@mui/material';
 import KeyboardDoubleArrowDownRoundedIcon from '@mui/icons-material/KeyboardDoubleArrowDownRounded';
 import Header from '../components/Header';
 
-import User from '../data/User';
+import Users from '../data/Users';
 
 function ManageCertificationsPage() {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ function ManageCertificationsPage() {
                     <Grid item xs={6}>
                         <ResultTitle>사용 가능 포인트</ResultTitle>
                         <Stack direction="row" alignItems="end" mt={1}>
-                            <Box sx={{fontFamily: 'PretendardM', fontSize: 66}}>{User.totalPoints}</Box>
+                            <Box sx={{fontFamily: 'PretendardM', fontSize: 66}}>{Users[sessionStorage.getItem('userId')].totalPoints}</Box>
                             <Box sx={{fontSize: 24, padding: '0 0 2px 10px'}}>Points</Box>
                         </Stack>
                     </Grid>
@@ -54,7 +54,7 @@ function ManageCertificationsPage() {
                         <Stack direction="row" alignItems="center">
                             <ResultTitle>총 봉사 횟수</ResultTitle>
                             <Stack direction="row" alignItems="end">
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{User.certificationList.length}</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{Users[sessionStorage.getItem('userId')].certificationList.length}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 0 4px 4px'}}>회</Box>
                             </Stack>
                         </Stack>
@@ -76,7 +76,7 @@ function ManageCertificationsPage() {
                         <Grid item xs={2} sx={{padding: '10px'}}>포인트</Grid>
                     </Grid>
                     {
-                        User.certificationList.map((value, idx) => {
+                        Users[sessionStorage.getItem('userId')].certificationList.map((value, idx) => {
                             return (
                                 <ListItem container>
                                     <ListSubItem item xs={1}>{value.id}</ListSubItem>

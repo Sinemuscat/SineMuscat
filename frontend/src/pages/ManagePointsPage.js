@@ -7,7 +7,7 @@ import { Box, Grid, Stack, Button } from '@mui/material';
 import Header from '../components/Header';
 import PresendPointModal from '../components/PresentPointModal';
 
-import User from '../data/User';
+import Users from '../data/Users';
 
 function ManagePointsPage() {
     const [wallet, setWallet] = useState("");
@@ -92,7 +92,7 @@ function ManagePointsPage() {
                         <ListHeader item xs={2}>적립 날짜</ListHeader>
                     </Grid>
                     {
-                        User.pointList.map((value, idx) => {
+                        Users[sessionStorage.getItem('userId')].pointList.map((value, idx) => {
                             return (
                                 <ListItem container>
                                     <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>{value.point} Points</ListSubItem>

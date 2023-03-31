@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Button, TextField } from '@mui/material';
+
 import Header from '../components/Header';
+import Users from '../data/Users';
 import kakao from '../images/kakao_logo.png';
 
 function LoginPage() {
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
+
     const navigate = useNavigate();
     const onClickSignup = () => {
         navigate('/signup');
@@ -13,6 +18,27 @@ function LoginPage() {
 
     const onClickFindPw = () => {
         navigate('/findpw');
+    };
+
+    const onClickLogin = () => {
+        // console.log({id: id, password: password})
+        if (!id) {
+            alert("아이디를 입력해주세요.")
+        }
+        else if (!Object.keys(Users).includes(id)) {
+            alert("아이디가 존재하지 않습니다.")
+        }
+        else if (Users[id].password !== password) {
+            alert("비밀번호가 일치하지 않습니다.")
+        }
+        else {
+            alert(`${Users[id].name}님, 로그인 되었습니다.`)
+            sessionStorage.setItem('userId', id)
+            sessionStorage.setItem('userColor', '#'+Math.floor(Math.random()*16777215).toString(16))
+            console.log(sessionStorage.getItem('userId'))
+            console.log(sessionStorage.getItem('userColor'))
+            navigate('/');
+        }
     };
 
     return (
@@ -23,6 +49,10 @@ function LoginPage() {
                 <TextField 
                     fullWidth 
                     label="아이디"
+                    value={id}
+                    onChange={(event) => {
+                        setId(event.target.value);
+                    }}
                     margin="dense"
                     inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                     InputLabelProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
@@ -30,6 +60,10 @@ function LoginPage() {
                 <TextField 
                     fullWidth 
                     label="비밀번호"
+                    value={password}
+                    onChange={(event) => {
+                        setPassword(event.target.value);
+                    }}
                     margin="dense"
                     type="password"
                     inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
@@ -42,7 +76,7 @@ function LoginPage() {
                     inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                     InputLabelProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                 /> */}
-                <LoginButton>로그인</LoginButton>
+                <LoginButton onClick={onClickLogin}>로그인</LoginButton>
                 <SubGrid container justifyContent='space-between'>
                     <SubButton onClick={onClickSignup}>회원가입</SubButton>
                     <SubButton onClick={onClickFindPw}>아이디/비밀번호 찾기</SubButton>

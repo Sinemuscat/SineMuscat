@@ -3,22 +3,23 @@ import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, TextField, Stack, ToggleButton, ToggleButtonGroup, Select, MenuItem } from '@mui/material';
-import PhoneAndroidRoundedIcon from '@mui/icons-material/PhoneAndroidRounded';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import Header from '../components/Header';
+import Close from '@mui/icons-material/CloseRounded';
+import Check from '@mui/icons-material/TaskAltRounded';
 
-import User from '../data/User';
+import Header from '../components/Header';
+import Users from '../data/Users';
 
 function EditUserInfoPage() {
-    const [id, setId] = useState(User.id);
-    const [password, setPassword] = useState(User.password);
+    const [id, setId] = useState(Users[sessionStorage.getItem('userId')].id);
+    const [password, setPassword] = useState(Users[sessionStorage.getItem('userId')].password);
     const [passwordC, setPasswordC] = useState('');
-    const [name, setName] = useState(User.name);
-    const [gender, setGender] = useState(User.gender);
-    const [phoneNumber, setPhoneNumber] = useState(User.phoneNumber);
-    const [emailInput, setEmailInput] = React.useState(User.email);
-    const [email, setEmail] = React.useState('');
-    const [walletAddress, setWalletAddress] = useState(User.walletAddress);
+    const [passwordCheck, setPasswordCheck] = useState(false);
+    const [name, setName] = useState(Users[sessionStorage.getItem('userId')].name);
+    const [gender, setGender] = useState(Users[sessionStorage.getItem('userId')].gender);
+    const [phoneNumber, setPhoneNumber] = useState(Users[sessionStorage.getItem('userId')].phoneNumber);
+    const [emailInput, setEmailInput] = useState(Users[sessionStorage.getItem('userId')].email.split('@')[0]);
+    const [email, setEmail] = useState(Users[sessionStorage.getItem('userId')].email.split('@')[1]);
+    const [walletAddress, setWalletAddress] = useState(Users[sessionStorage.getItem('userId')].walletAddress);
     const [wallet, setWallet] = useState(true);
 
     
@@ -51,9 +52,24 @@ function EditUserInfoPage() {
       }
     };
 
-    //const onClickWallet = () => {
-    //    setWallet(!wallet);
-    //};
+    const onClickEdit = () => {
+        if (!id || !password || !name || !emailInput || !wallet) {
+            alert("입력하지 않은 값이 있음")
+        }
+        else if (!passwordCheck) {
+            alert("비밀번호 일치 확인이 되지 않았습니다.")
+        }
+        else {
+            Users[id].password = password;
+            Users[id].name = name;
+            Users[id].gender = gender;
+            Users[id].email = emailInput+'@'+email;
+            // Users[id].walletAddress = walletAddress;
+            console.log(Users[id]);
+            alert(`회원 정보 수정 완료!`)
+            navigate('/mypage');
+        }
+    };
 
     return (
         <>
@@ -66,7 +82,8 @@ function EditUserInfoPage() {
                         <ItemTitle>아이디</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue={id}
+                            value={id}
+                            disabled={true}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <CheckButton disabled>중복 확인</CheckButton>
@@ -79,7 +96,16 @@ function EditUserInfoPage() {
                         <ItemTitle>비밀번호</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue={password}
+                            value={password}
+                            type="password"
+                            onChange={(event) => {
+                              setPassword(event.target.value);
+                              if (event.target.value===passwordC) {
+                                setPasswordCheck(true);
+                            } else {
+                                setPasswordCheck(false);
+                            }
+                            }}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                     </ItemStack>
@@ -87,10 +113,23 @@ function EditUserInfoPage() {
                         <ItemTitle>비밀번호 확인</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue={passwordC}
+                            value={passwordC}
+                            type="password"
+                            onChange={(event) => {
+                                setPasswordC(event.target.value);
+                                if (password===event.target.value) {
+                                    setPasswordCheck(true);
+                                } else {
+                                    setPasswordCheck(false);
+                                }
+                            }}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
-                        <CloseRoundedIcon sx={{color: 'red', marginLeft: '10px'}} />
+                        {
+                            passwordCheck ?
+                            <Check sx={{color: 'green', marginLeft: '10px'}} /> :
+                            <Close sx={{color: 'red', marginLeft: '10px'}} />
+                        }
                     </ItemStack>
                 </Stack>
                 <Stack mt={5}>
@@ -99,8 +138,11 @@ function EditUserInfoPage() {
                         <ItemTitle>이름</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue={name}
                             sx={{width: 120}}
+                            value={name}
+                            onChange={(event) => {
+                              setName(event.target.value);
+                            }}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                     </ItemStack>
@@ -121,19 +163,22 @@ function EditUserInfoPage() {
                         <ItemTitle>전화번호</ItemTitle>
                         <NumberField 
                             size="small"
-                            defaultValue={phoneNumber.substring(0,3)}
+                            value={phoneNumber.substring(0,3)}
+                            disabled={true}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>-</Box>
                         <NumberField 
                             size="small" 
-                            defaultValue={phoneNumber.substring(3,7)}
+                            value={phoneNumber.substring(3,7)}
+                            disabled={true}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>-</Box>
                         <NumberField 
                             size="small" 
-                            defaultValue={phoneNumber.substring(7,11)}
+                            value={phoneNumber.substring(7,11)}
+                            disabled={true}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                     </ItemStack>
@@ -141,8 +186,11 @@ function EditUserInfoPage() {
                         <ItemTitle>이메일</ItemTitle>
                         <TextField 
                             size="small" 
-                            defaultValue={emailInput}
                             sx={{width: 130}}
+                            value={emailInput}
+                            onChange={(event) => {
+                                setEmailInput(event.target.value);
+                              }}
                             inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         />
                         <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>@</Box>
@@ -153,8 +201,8 @@ function EditUserInfoPage() {
                           size="small"
                           MenuProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                         >
-                          <MenuItem value="" selected>gmail.com</MenuItem>
-                          <MenuItem value={10}>naver.com</MenuItem>
+                          <MenuItem value="gmail.com" selected>gmail.com</MenuItem>
+                          <MenuItem value="naver.com">naver.com</MenuItem>
                         </Select>
                     </ItemStack>
                     <ItemStack direction="row" alignItems='center'>
@@ -170,7 +218,7 @@ function EditUserInfoPage() {
                         </Box>
                     </ItemStack>
                 </Stack>
-                <SaveButton>저장</SaveButton>
+                <SaveButton onClick={onClickEdit}>저장</SaveButton>
             </Body>
         </>
     );

@@ -3,14 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, TextField, Stack, ToggleButton, ToggleButtonGroup, Select, MenuItem } from '@mui/material';
 import PhoneAndroidRoundedIcon from '@mui/icons-material/PhoneAndroidRounded';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import Close from '@mui/icons-material/CloseRounded';
+import Check from '@mui/icons-material/TaskAltRounded';
+
 import Header from '../components/Header';
+import Users from '../data/Users';
 
 function SignupPage() {
-    const [step, setStep] = useState(true);
+    const [step, setStep] = useState(false);
+    const [id, setId] = useState('');
+    const [idCheck, setIdCheck] = useState(false);
+    const [password, setPassword] = useState('');
+    const [passwordC, setPasswordC] = useState('');
+    const [passwordCheck, setPasswordCheck] = useState(false);
+    const [name, setName] = useState('');
     const [gender, setGender] = useState('male');
-    const [email, setEmail] = React.useState('');
-    const [wallet, setWallet] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState('01025817018');
+    const [emailInput, setEmailInput] = useState('');
+    const [email, setEmail] = useState('gmail.com');
+    const [wallet, setWallet] = useState('1234');
     
     const navigate = useNavigate();
     const onClickSetStep = () => {
@@ -43,9 +54,49 @@ function SignupPage() {
       }
     };
 
-    //const onClickWallet = () => {
-    //    setWallet(!wallet);
-    //};
+    const onClickCheckId = () => {
+        if (Object.keys(Users).includes(id)) {
+            alert("이미 존재하는 아이디입니다.")
+            setIdCheck(false)
+        } else {
+            alert("사용 가능한 아이디입니다.")
+            setIdCheck(true)
+        }
+    };
+
+    const onClickSignUp = () => {
+        if (!id || !password || !name || !emailInput || !wallet) {
+            alert("입력하지 않은 값이 있습니다.")
+        }
+        else if (!idCheck) {
+            alert("아이디 중복 확인이 되지 않았습니다.")
+        }
+        else if (!passwordCheck) {
+            alert("비밀번호 일치 확인이 되지 않았습니다.")
+        }
+        else if (id.length<4 || id.length>10) {
+            alert("아이디는 4~10글자 이내여야합니다.")
+        }
+        else {
+            Users[id] = {
+                id: id,
+                password: password,
+                name: name,
+                gender: gender,
+                birth: '',
+                phoneNumber: phoneNumber,
+                email: emailInput+'@'+email,
+                walletAddress: wallet,
+                totalPoints: 0,
+                pointList: [],
+                certificationList: [],
+                purchaseList: [],
+            };
+            console.log(Users);
+            alert(`회원가입 완료! ${name}님 환영합니다.`)
+            navigate('/login');
+        }
+    };
 
     return (
         <>
@@ -80,9 +131,14 @@ function SignupPage() {
                             <ItemTitle>아이디</ItemTitle>
                             <TextField 
                                 size="small" 
+                                value={id}
+                                onChange={(event) => {
+                                    setId(event.target.value);
+                                    setIdCheck(false);
+                                }}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             />
-                            <CheckButton>중복 확인</CheckButton>
+                            <CheckButton onClick={onClickCheckId} disabled={idCheck}>중복 확인</CheckButton>
                         </ItemStack>
                         <Stack direction="row" alignItems='center' sx={{paddingTop: '5px'}}>
                             <ItemTitle></ItemTitle>
@@ -92,6 +148,16 @@ function SignupPage() {
                             <ItemTitle>비밀번호</ItemTitle>
                             <TextField 
                                 size="small" 
+                                value={password}
+                                type="password"
+                                onChange={(event) => {
+                                  setPassword(event.target.value);
+                                  if (event.target.value===passwordC) {
+                                    setPasswordCheck(true);
+                                } else {
+                                    setPasswordCheck(false);
+                                }
+                                }}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             />
                         </ItemStack>
@@ -99,9 +165,23 @@ function SignupPage() {
                             <ItemTitle>비밀번호 확인</ItemTitle>
                             <TextField 
                                 size="small" 
+                                value={passwordC}
+                                type="password"
+                                onChange={(event) => {
+                                    setPasswordC(event.target.value);
+                                    if (password===event.target.value) {
+                                        setPasswordCheck(true);
+                                    } else {
+                                        setPasswordCheck(false);
+                                    }
+                                }}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             />
-                            <CloseRoundedIcon sx={{color: 'red', marginLeft: '10px'}} />
+                            {
+                                passwordCheck ?
+                                <Check sx={{color: 'green', marginLeft: '10px'}} /> :
+                                <Close sx={{color: 'red', marginLeft: '10px'}} />
+                            }
                         </ItemStack>
                     </Stack>
                     <Stack mt={5}>
@@ -111,6 +191,10 @@ function SignupPage() {
                             <TextField 
                                 size="small" 
                                 sx={{width: 120}}
+                                value={name}
+                                onChange={(event) => {
+                                  setName(event.target.value);
+                                }}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             />
                         </ItemStack>
@@ -131,17 +215,22 @@ function SignupPage() {
                             <ItemTitle>전화번호</ItemTitle>
                             <NumberField 
                                 size="small"
-                                defaultValue="010"
+                                defaultValue={phoneNumber.substring(0,3)}
+                                disabled={true}
+                                inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
+                            />
+                            <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>-</Box>
+                            <NumberField 
+                                size="small"
+                                defaultValue={phoneNumber.substring(3,7)} 
+                                disabled={true}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             />
                             <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>-</Box>
                             <NumberField 
                                 size="small" 
-                                inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
-                            />
-                            <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>-</Box>
-                            <NumberField 
-                                size="small" 
+                                defaultValue={phoneNumber.substring(7,11)}
+                                disabled={true}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             />
                         </ItemStack>
@@ -150,6 +239,10 @@ function SignupPage() {
                             <TextField 
                                 size="small" 
                                 sx={{width: 130}}
+                                value={emailInput}
+                                onChange={(event) => {
+                                  setEmailInput(event.target.value);
+                                }}
                                 inputProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             />
                             <Box sx={{fontSize: 14, padding: '0 8px 0 8px'}}>@</Box>
@@ -160,8 +253,8 @@ function SignupPage() {
                               size="small"
                               MenuProps={{style: {fontSize: 14, fontFamily: 'PretendardL'}}}
                             >
-                              <MenuItem value="" selected>gmail.com</MenuItem>
-                              <MenuItem value={10}>naver.com</MenuItem>
+                              <MenuItem value="gmail.com" selected>gmail.com</MenuItem>
+                              <MenuItem value="naver.com">naver.com</MenuItem>
                             </Select>
                         </ItemStack>
                         <ItemStack direction="row" alignItems='center'>
@@ -177,7 +270,7 @@ function SignupPage() {
                             </Box>
                         </ItemStack>
                     </Stack>
-                    <SignupButton>가입</SignupButton>
+                    <SignupButton onClick={onClickSignUp}>가입</SignupButton>
                 </>
                 }
             </Body>
@@ -279,6 +372,10 @@ const CheckButton = styled(Button)(() => ({
     '&:hover': {
         backgroundColor: '#34ABFF',
     },
+    "&:disabled": {
+        color: 'white',
+        backgroundColor: 'lightgrey', 
+    }
 }));
 
 const GenderButton = styled(ToggleButton)({
@@ -297,6 +394,8 @@ const GenderButton = styled(ToggleButton)({
 
 const NumberField = styled(TextField)(() => ({
     width: 60,
+    // backgroundColor: '#EFEFEF',
+    // borderRadius: 5,
 }));
 
 const WalletButton = styled(Button)({

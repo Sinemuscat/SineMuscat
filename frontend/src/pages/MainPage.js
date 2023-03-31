@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Button } from '@mui/material';
@@ -12,18 +12,34 @@ import main3 from '../images/main3.png';
 import Header from '../components/Header';
 
 function MainPage() {
+    var login = sessionStorage.getItem('userId')!==null;
     const navigate = useNavigate();
 
     const onClickCert = () => {
-        navigate('/managecertifications');
+        if(login === false) {
+            alert("로그인이 필요합니다.")
+            navigate('/login');
+        } else {
+          navigate('/managecertifications');
+        }
     };
 
     const onClickUsePoints = () => {
-        navigate('/usepoints');
+        if(login === false) {
+            alert("로그인이 필요합니다.")
+            navigate('/login');
+        } else {
+          navigate('/usepoints');
+        }
     };
 
     const onClickManagePoints = () => {
-        navigate('/managepoints');
+        if(login === false) {
+            alert("로그인이 필요합니다.")
+            navigate('/login');
+        } else {
+          navigate('/managepoints');
+        }
     };
 
     return (

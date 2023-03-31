@@ -17,6 +17,9 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import PurchaseResultPage from './pages/PurchaseResultPage';
 
 function App() {
+  // console.log(sessionStorage.getItem('userId'))
+  // sessionStorage.clear()
+
   return (
     <>
       <ThemeProvider theme={THEME}>

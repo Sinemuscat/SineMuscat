@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button } from '@mui/material';
 import Header from '../components/Header';
 
-import User from '../data/User';
+import Users from '../data/Users';
 
 function PurchaseHistoryPage() {
     return (
@@ -14,7 +14,7 @@ function PurchaseHistoryPage() {
             <Body>
                 <Badge sx={{width: '55px'}}>미사용</Badge>
                 {
-                    User.purchaseList.map((value, idx) => {
+                    Users[sessionStorage.getItem('userId')].purchaseList.map((value, idx) => {
                         if (value.isUsed===false)
                             return (
                                 <HistoryStack container>
@@ -38,26 +38,9 @@ function PurchaseHistoryPage() {
                         else return <></>
                     })
                 }
-                {/* <HistoryStack container>
-                    <Grid item xs={2}>
-                        <ProductImg />
-                    </Grid>
-                    <Grid item xs={8}>
-                        <ProductDetail justifyContent="space-between">
-                            <Stack spacing={0.5}>
-                                <Brand>CU</Brand>
-                                <ProductName>츄파춥스</ProductName>
-                            </Stack>
-                            <Date>2022-02-01 구매 / 2023-02-01 까지</Date>
-                        </ProductDetail>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Status>사용 전</Status>
-                    </Grid>
-                </HistoryStack> */}
                 <Badge sx={{width: '165px'}}>사용완료 및 유효기간 만료</Badge>
                 {
-                    User.purchaseList.map((value, idx) => {
+                    Users[sessionStorage.getItem('userId')].purchaseList.map((value, idx) => {
                         if (value.isUsed===true)
                             return (
                                 <HistoryStack container>
@@ -80,27 +63,6 @@ function PurchaseHistoryPage() {
                             )
                             else return <></>
                     })
-                    // [0,0,0,0,0,0].map(() => {
-                    //     return (
-                    //         <HistoryStack container>
-                    //             <Grid item xs={2}>
-                    //                 <ProductImg />
-                    //             </Grid>
-                    //             <Grid item xs={8}>
-                    //                 <ProductDetail justifyContent="space-between">
-                    //                     <Stack spacing={0.5}>
-                    //                         <Brand sx={{color: 'lightgrey'}}>CU</Brand>
-                    //                         <ProductName sx={{color: 'lightgrey'}}>츄파춥스</ProductName>
-                    //                     </Stack>
-                    //                     <Date sx={{color: 'lightgrey'}}>2021-02-01 구매 / 2022-02-01 까지</Date>
-                    //                 </ProductDetail>
-                    //             </Grid>
-                    //             <Grid item xs={2}>
-                    //                 <Status sx={{color: 'lightgrey'}}>사용 완료</Status>
-                    //             </Grid>
-                    //         </HistoryStack>
-                    //     )
-                    // })
                 }
             </Body>
         </>
