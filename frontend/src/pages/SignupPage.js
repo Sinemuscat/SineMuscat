@@ -55,12 +55,18 @@ function SignupPage() {
     };
 
     const onClickCheckId = () => {
-        if (Object.keys(Users).includes(id)) {
-            alert("이미 존재하는 아이디입니다.")
+        if (id.length<4 || id.length>10) {
+            alert("아이디는 4~10글자 이내여야합니다.")
             setIdCheck(false)
-        } else {
-            alert("사용 가능한 아이디입니다.")
-            setIdCheck(true)
+        }
+        else {
+            if (Object.keys(Users).includes(id)) {
+                alert("이미 존재하는 아이디입니다.")
+                setIdCheck(false)
+            } else {
+                alert("사용 가능한 아이디입니다.")
+                setIdCheck(true)
+            }
         }
     };
 
