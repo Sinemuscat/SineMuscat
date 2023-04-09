@@ -42,11 +42,13 @@ function PresendPointModal() {
         console.log('Wallet not connected');
         return;
       }
+
+      const recipient = document.getElementById('received').value;
     
        // Send transaction
        await web3.eth.sendTransaction({
         from: wallet,
-        to: wallet,
+        to: recipient,
         value: web3.utils.toWei(e.target.amount.value, 'ether'),
       });
     };

@@ -86,7 +86,7 @@ function Header() {
                     <Stack direction="row" spacing={5}>
                         <Box><Menu onClick={onClickCert}>봉사 인증서 관리</Menu></Box>
                         <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
-                        <Box><Menu onClick={onClickManagePoints}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000 + "" : ""} Points</Menu></Box> 
+                        <Box><Menu onClick={onClickManagePoints}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10 + "" : ""} Points</Menu></Box> 
                         {
                             login ? 
                             <LoginAvatar onClick={onClickUser}>{Users[sessionStorage.getItem('userId')].name.substring(1,3)}</LoginAvatar> :

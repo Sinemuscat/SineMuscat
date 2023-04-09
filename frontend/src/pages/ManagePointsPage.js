@@ -57,7 +57,7 @@ function ManagePointsPage() {
                     <Grid xs={6} item pt={2} pl={1}>
                         <Box sx={{fontFamily: 'PretendardM', fontSize: '18px'}}>현재 포인트</Box>
                         <Stack direction="row" alignItems="end" my={1}>
-                            <Box sx={{fontFamily: 'PretendardB', fontSize: '60px'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000: ""}</Box>
+                            <Box sx={{fontFamily: 'PretendardB', fontSize: '60px'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10: ""}</Box>
                             <Box sx={{fontFamily: 'PretendardM',fontSize: '24px', padding: '0 0 8px 10px'}}>점</Box>
                         </Stack>
                         <Box sx={{fontSize: '12px', color: 'grey', paddingTop: 4, lineHeight: 1.4}}>

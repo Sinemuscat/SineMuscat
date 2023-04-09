@@ -6,35 +6,20 @@ import { Box, Button, Modal, Stack, Checkbox } from '@mui/material'
 import Close from "@mui/icons-material/CloseRounded";
 import Minus from '@mui/icons-material/RemoveRounded';
 import Arrow from '@mui/icons-material/KeyboardDoubleArrowRightRounded';
+import PurchaseStuff from '../truffle_abis/PurchaseStuff.json';
 
 function ConfirmPurchaseModal() {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [wallet, setWallet] = useState("");
     const [balanceInEther, setBalanceInEther] = useState("");
-
-    useEffect(() => {
-      getCurrentWalletBalance();
-    }, [wallet]);
-
-    const handleOpen = () => {
-        setOpen(true);
-    }
-
-    const handleClose = () => {
-        setOpen(false);
-        setError(!error);
-    }
-
-    const navigate = useNavigate();
-
-    const onClickPurchase = () => {
-        navigate('/puchaseresult');
-    };
-
+    const contractABI = PurchaseStuff.abi;
+    const contractAddress= '0x07b8f5eC413b0de252b6071C0DDf3b10017DC04a';
     const web3 = new Web3(window.ethereum);
     const getCurrentWalletBalance = async () => {
       if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+        
         try {
           const accounts = await window.ethereum.request({
             method: "eth_accounts",
@@ -53,6 +38,52 @@ function ConfirmPurchaseModal() {
           console.error(err);
         }
       }
+    };
+
+    useEffect(() => {
+      getCurrentWalletBalance();
+    }, [wallet]);
+
+    const handleOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+        setError(!error);
+    }
+
+    const navigate = useNavigate();
+
+    
+    const purchase = async (value) => {
+      setLoading(true);
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+      if (accounts.length > 0) {
+        const address = accounts[0];
+        const PurchaseStuffContract = new web3.eth.Contract(contractABI, contractAddress);
+        const value = web3.utils.toWei('25', 'ether');
+        PurchaseStuffContract.methods.purchase().send({ from: address, value })
+          .on('transactionHash', (hash) => {
+            setLoading(false);
+            navigate('/puchaseresult');
+          })
+          .on('error', (error) => {
+            console.error(error);
+            setLoading(false);
+          });
+      } else {
+        console.log("No wallet connected.");
+        setLoading(false);
+      }
+    }
+
+
+    const onClickPurchase = () => {
+      purchase();
+      navigate('/puchaseresult');
     };
 
     return (
@@ -74,7 +105,7 @@ function ConfirmPurchaseModal() {
                         <Stack direction="row" spacing={1} alignItems="center" py={1}>
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>보유 Points</SubTitle>
-                                <SubContent sx={{color: 'grey'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*1000 + "" : ""}  Points</SubContent>
+                                <SubContent sx={{color: 'grey'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10 + "" : ""}  Points</SubContent>
                             </PointChange>
                             <Minus />
                             <PointChange spacing={0.5}>
@@ -84,7 +115,7 @@ function ConfirmPurchaseModal() {
                             <Arrow />
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>잔여 Points</SubTitle>
-                                <SubContent sx={{color: 'grey'}}>2250 Points</SubContent>
+                                <SubContent sx={{color: 'grey'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10 +"" -250 : ""} Points</SubContent>
                             </PointChange>
                         </Stack>
                         <Stack py={1} spacing={0.5}>
