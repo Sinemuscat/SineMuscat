@@ -1,9 +1,8 @@
-import React from 'react';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Stack, Button } from '@mui/material';
+import { Box, Grid, Stack, Button, ToggleButton, ToggleButtonGroup, Pagination } from '@mui/material';
 import Header from '../components/Header';
 import PresendPointModal from '../components/PresentPointModal';
 
@@ -48,6 +47,52 @@ function ManagePointsPage() {
         navigate('/usepoints');
     };
 
+    const user = Users[sessionStorage.getItem('userId')];
+    const option = ["전체", "획득", "사용"];
+    const [value, setValue] = useState(option[0]);
+
+    const [pointList, setPointList] = useState(user.pointList.sort((a, b) => b.id - a.id));
+
+    const handleRadioChange = (event, nextValue) => {
+      setValue(nextValue);
+      setPage(1);
+
+      switch (nextValue) {
+        case "획득":
+            const gainPoints = user.pointList.filter((item) => {
+                return item.point > 0;
+            });
+            setPointList(gainPoints.sort((a, b) => b.id - a.id));
+            break;
+        case "사용":
+            const usePoints = user.pointList.filter((item) => {
+                return item.point < 0;
+            });
+            setPointList(usePoints.sort((a, b) => b.id - a.id));
+            break;
+        default:
+            setPointList(user.pointList.sort((a, b) => b.id - a.id));
+            break;
+        }
+    };
+
+    const LAST_PAGE = pointList.length % 5 === 0 ? 
+    	parseInt(pointList.length / 5) : parseInt(pointList.length / 5) + 1;
+    const [page, setPage] = useState(1); 
+    const [data, setData] = useState(pointList.slice(5));
+    
+    useEffect(() => {
+        if(page === LAST_PAGE){
+          setData(pointList.slice(5 * (page - 1)));
+        } else {
+          setData(pointList.slice(5 * (page - 1), 5 * (page - 1) + 5));
+        }  
+      }, [page, LAST_PAGE, pointList]);
+    
+    const handlePage = (event, value) => {
+      setPage(value);
+    }
+
     return (
         <>
             <Header />
@@ -80,36 +125,40 @@ function ManagePointsPage() {
                         </Banner>
                     </Grid>
                 </Grid>
-                <ListStack>
-                    <OptionStack direction="row" alignItems='center'>
-                        <Option>전체</Option>
-                        <Option2>획득</Option2>
-                        <Option2>사용</Option2>
-                    </OptionStack>
+                <ToggleButtonGroup value={value} exclusive onChange={handleRadioChange} sx={{marginTop: 5}}>
+                    {
+                        option.map((v, id) => {
+                            return <OptionButton value={v} key={id}>{v}</OptionButton>
+                        })
+                    }
+                </ToggleButtonGroup>
+                <Stack alignItems="center">
                     <Grid container sx={{textAlign: 'center', color: 'grey'}}>
+                        <ListHeader item xs={1}>번호</ListHeader>
                         <ListHeader item xs={1.5}>포인트</ListHeader>
-                        <ListHeader item xs={8.5}>적립 구분</ListHeader>
+                        <ListHeader item xs={7.5}>적립 구분</ListHeader>
                         <ListHeader item xs={2}>적립 날짜</ListHeader>
                     </Grid>
                     {
-                        Users[sessionStorage.getItem('userId')].pointList.map((value, idx) => {
+                        data.map((value, idx) => {
                             return (
-                                <ListItem container>
+                                <ListItem container key={idx}>
+                                    <ListSubItem item xs={1}>{(idx+1)+(page-1)*5}</ListSubItem>
                                     <ListSubItem item xs={1.5} sx={{fontFamily: 'PretendardM', color: '#0094FF'}}>{value.point} Points</ListSubItem>
-                                    <ListSubItem item xs={8.5}>{value.content}</ListSubItem>
-                                    <ListSubItem item xs={2}>{value.date.substring(0,4)}-{value.date.substring(4,6)}-{value.date.substring(6,8)}</ListSubItem>
+                                    <ListSubItem item xs={7.5}>{value.content}</ListSubItem>
+                                    <ListSubItem item xs={2}>{value.date}</ListSubItem>
                                 </ListItem>
                             )
                         })
                     }
-                    <Stack direction="row" justifyContent='center' mt={2}>
-                        <Box sx={{padding: '20px', color: '#0094FF'}}>1</Box>
-                        <Box sx={{padding: '20px'}}>2</Box>
-                        <Box sx={{padding: '20px'}}>3</Box>
-                        <Box sx={{padding: '20px'}}>4</Box>
-                        <Box sx={{padding: '20px'}}>5</Box>
-                    </Stack>
-                </ListStack>
+                    <Pagination 
+                        count={LAST_PAGE} 
+                        defaultPage={1} 
+                        boundaryCount={2} 
+                        size="large" 
+                        sx={{margin: 2}} 
+                        onChange={handlePage} />
+                </Stack>
             </Body>
         </>
     );
@@ -150,35 +199,23 @@ const CustomButton = styled(Button)(() => ({
     },
 }));
 
-const OptionStack = styled(Stack)(() => ({
-    justifyContent: 'end',
-    paddingBottom: 10,
-}));
-
-const Option = styled(Button)(() => ({
-    backgroundColor: 'grey',
-    color: 'white',
-    border: '1px solid grey',
-    marginLeft: 5,
+const OptionButton = styled(ToggleButton)(() => ({
+    width: 60,
+    fontSize: 12,
+    backgroundColor: 'transparent',
+    color: 'lightgrey',
+    border: 'none',
+    padding: 5,
     '&:hover': {
-        backgroundColor: '#D0D0D0',
-        border: '1px solid #D0D0D0',
+        backgroundColor: 'transparent',
+        color: 'grey',
+        border: 'none',
     },
-}));
-
-const Option2 = styled(Button)(() => ({
-    backgroundColor: 'white',
-    color: '#D0D0D0',
-    border: '1px solid #D0D0D0',
-    marginLeft: 5,
-    '&:hover': {
+    '&.Mui-selected': {
         backgroundColor: '#F0F0F0',
-        border: '1px solid #D0D0D0',
+        color: 'dimgrey',
+        border: 'none',
     },
-}));
-
-const ListStack = styled(Stack)(() => ({
-    marginTop: 40,
 }));
 
 const ListHeader = styled(Grid)(() => ({
