@@ -1,10 +1,16 @@
-import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Button, Stack } from '@mui/material'
 import Header from '../components/Header';
 
+import Users from '../data/Users';
+
 function PurchaseResultPage() {
+    const location = useLocation();
+    const product = location.state.product;
+    const count = location.state.count;
+
     const navigate = useNavigate();
 
     const onClickHistory = () => {
@@ -24,12 +30,16 @@ function PurchaseResultPage() {
                 <Stack direction="row">
                     <ProductImg />
                     <Stack spacing={0.5} ml={2}>
-                        <ProductName>츄파춥스</ProductName>
-                        <ProductCount>수량 : 1개</ProductCount>
+                        <ProductName>{product.name}</ProductName>
+                        <ProductCount>수량 : {count}개</ProductCount>
                     </Stack>
                 </Stack>
                 <Stack py={4} spacing={1}>
-                    <SubTitle>'010-2581-7018' 번호로 쿠폰이 전송 완료되었습니다.</SubTitle>
+                    <SubTitle>'{
+                        Users[sessionStorage.getItem('userId')].phoneNumber.slice(0,3)+"-"+
+                        Users[sessionStorage.getItem('userId')].phoneNumber.slice(3,7)+"-"+
+                        Users[sessionStorage.getItem('userId')].phoneNumber.slice(7,11)
+                    }' 번호로 쿠폰이 전송 완료되었습니다.</SubTitle>
                     <Description>문자메시지를 확인해주세요.</Description>
                 </Stack>
                 <Stack direction="row" spacing={1} justifyContent="center">

@@ -1,56 +1,113 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Stack, Button, Checkbox } from '@mui/material';
+import { Box, Grid, Stack, ToggleButton, ToggleButtonGroup, Pagination } from '@mui/material';
 import Header from '../components/Header';
+
+import Products from '../data/Products';
 
 function UsePointsPage() {
     const navigate = useNavigate();
 
-    const onClickProduct = () => {
-        navigate('/productdetail');
+    const onClickProduct = (value) => {
+        navigate('/productdetail', {state: {
+            id: value.id,
+            brand: value.brand,
+            name: value.productName,
+            price: value.price,
+            detail: value.productDetail,
+        }});
     };
+
+    const category = ["전체", "카페/베이커리", "외식", "편의점", "뷰티"];
+    const [value, setValue] = useState(category[0]);
+
+    // const sorting = ["최신순", "낮은 가격순", "높은 가격순", "제품명순"];
+    // const [method, setMethod] = useState(sorting[0]);
+
+    const [productList, setProductList] = useState(Products);
+
+    const handleRadioChange = (event, nextValue) => {
+        setValue(nextValue);
+        setPage(1);
+
+        switch (nextValue) {
+            case "전체":
+                setProductList(Products);
+                break;
+            default:
+                setProductList(Products.filter((item) => {return item.category===nextValue;}));
+                break;
+        }
+    };
+
+    var pv = 8;
+    const LAST_PAGE = productList.length % pv === 0 ? 
+    	parseInt(productList.length / pv) : parseInt(productList.length / pv) + 1;
+    const [page, setPage] = useState(1); 
+    const [data, setData] = useState(productList.slice(pv));
+    
+    useEffect(() => {
+        if(page === LAST_PAGE){
+          setData(productList.slice(pv * (page - 1)));
+        } else {
+          setData(productList.slice(pv * (page - 1), pv * (page - 1) + pv));
+        }  
+      }, [page, LAST_PAGE, productList, pv]);
+    
+    const handlePage = (event, value) => {
+      setPage(value);
+    }
 
     return (
         <>
             <Header />
             <Title>포인트 사용</Title>
             <Body>
-                <Stack direction="row" sx={{borderBottom: '1px solid lightgrey'}} py={2} justifyContent="center">
-                    <CategoryButton>전체</CategoryButton>
-                    <CategoryButton2>카페/베이커리</CategoryButton2>
-                    <CategoryButton2>외식</CategoryButton2>
-                    <CategoryButton2>편의점</CategoryButton2>
-                    <CategoryButton2>뷰티</CategoryButton2>
+                <Stack alignItems="center" my={2}>
+                    <ToggleButtonGroup value={value} exclusive onChange={handleRadioChange}>
+                        {
+                            category.map((v, id) => {
+                                return <CategoryButton value={v} key={id}>{v}</CategoryButton>
+                            })
+                        }
+                    </ToggleButtonGroup>
                 </Stack>
-                <Stack direction="row" justifyContent="space-between" alignItems="center" my={1}>
-                    <Box sx={{color: 'black', fontSize: '12px'}}><Checkbox size="small" />구매가능 물건만</Box>
-                    <Stack direction="row" alignItems="center">
-                        <Button sx={{color: 'black'}}>최신순</Button>
-                        <Box sx={{fontSize: '14px'}}>|</Box>
-                        <Button sx={{color: 'black'}}>낮은 가격순</Button>
-                        <Box sx={{fontSize: '14px'}}>|</Box>
-                        <Button sx={{color: 'black'}}>높은 가격순</Button>
-                        <Box sx={{fontSize: '14px'}}>|</Box>
-                        <Button sx={{color: 'black'}}>제품명순</Button>
-                    </Stack>
+                <Stack direction="row" justifyContent="end" alignItems="center" my={1}>
+                    {/* <Box sx={{color: 'black', fontSize: '12px'}}><Checkbox size="small" />구매가능 물건만</Box> */}
+                    {/* <ToggleButtonGroup value={method} exclusive onChange={handleSortChange}>
+                        {
+                            sorting.map((v, id) => {
+                                return <ToggleButton value={v} key={id}>{v}</ToggleButton>
+                            })
+                        }
+                    </ToggleButtonGroup> */}
                 </Stack>
-                <Grid container spacing={2}>
-                    {
-                        [0,0,0,0,0,0,0,0,0,0,0].map(() => {
-                            return (
-                                <Grid item xs={3}>
-                                    <Stack>
-                                        <ProductImage onClick={onClickProduct}></ProductImage>
-                                        <Brand>스타벅스</Brand>
-                                        <ProductName>아이스 카페 아메리카노 T</ProductName>
-                                        <Price>45 Points</Price>
-                                    </Stack>
-                                </Grid>
-                            )
-                        })
-                    }
-                </Grid>
+                <Stack alignItems="center">
+                    <Grid container spacing={2}>
+                        {
+                            data.map((value, idx) => {
+                                return (
+                                    <Grid item xs={3} key={idx}>
+                                        <Stack>
+                                            <ProductImage onClick={() => onClickProduct(value)}></ProductImage>
+                                            <Brand>{value.brand}</Brand>
+                                            <ProductName>{value.productName}</ProductName>
+                                            <Price>{value.price} Points</Price>
+                                        </Stack>
+                                    </Grid>
+                                )
+                            })
+                        }
+                    </Grid>
+                    <Pagination 
+                        count={LAST_PAGE} 
+                        defaultPage={1} 
+                        boundaryCount={2} 
+                        size="large" 
+                        sx={{margin: 4}} 
+                        onChange={handlePage} />
+                </Stack>
             </Body>
         </>
     );
@@ -71,27 +128,23 @@ const Body = styled(Stack)(() => ({
     paddingBottom: 50,
 }));
 
-const CategoryButton = styled(Button)(() => ({
-    backgroundColor: 'grey',
-    color: 'white',
-    border: '1px solid grey',
-    margin: '0 10px 0 10px',
-    width: '100px',
+const CategoryButton = styled(ToggleButton)(() => ({
+    width: 120,
+    fontSize: 14,
+    backgroundColor: 'transparent',
+    color: 'lightgrey',
+    border: 'none',
+    padding: 10,
+    margin: 10,
     '&:hover': {
-        backgroundColor: '#D0D0D0',
-        border: '1px solid #D0D0D0',
+        backgroundColor: 'transparent',
+        color: 'grey',
+        border: 'none',
     },
-}));
-
-const CategoryButton2 = styled(Button)(() => ({
-    backgroundColor: 'white',
-    color: '#D0D0D0',
-    border: '1px solid #D0D0D0',
-    margin: '0 10px 0 10px',
-    width: '100px',
-    '&:hover': {
-        backgroundColor: '#F0F0F0',
-        border: '1px solid #D0D0D0',
+    '&.Mui-selected': {
+        backgroundColor: 'grey',
+        color: 'white',
+        border: 'none',
     },
 }));
 

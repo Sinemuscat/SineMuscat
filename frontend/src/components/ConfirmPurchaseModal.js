@@ -8,7 +8,9 @@ import Minus from '@mui/icons-material/RemoveRounded';
 import Arrow from '@mui/icons-material/KeyboardDoubleArrowRightRounded';
 import PurchaseStuff from '../truffle_abis/PurchaseStuff.json';
 
-function ConfirmPurchaseModal() {
+import Users from '../data/Users';
+
+function ConfirmPurchaseModal({product, count}) {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -54,7 +56,6 @@ function ConfirmPurchaseModal() {
     }
 
     const navigate = useNavigate();
-
     
     const purchase = async (value) => {
       setLoading(true);
@@ -80,11 +81,29 @@ function ConfirmPurchaseModal() {
       }
     }
 
+    const [checked, setChecked] = useState(false);
+    const handleCheckChange = (event) => {
+        if (event.target.checked) {
+          setChecked(true);
+        } else {
+          setChecked(false);
+        }
+    };
 
     const onClickPurchase = () => {
-      purchase();
-      navigate('/puchaseresult');
-    };
+        purchase();
+
+        // 결제 동의가 체크 되었을 때만 결제 진행
+        if (checked) {
+            navigate('/puchaseresult', {state: {
+                product: product,
+                count: count,
+            }});
+        }
+        else {
+            alert("결제 동의 항목에 체크가 필요합니다.")
+        }
+      };
 
     return (
         <>
@@ -98,8 +117,8 @@ function ConfirmPurchaseModal() {
                         <Stack direction="row">
                             <ProductImg />
                             <Stack spacing={0.5} ml={2}>
-                                <ProductName>츄파춥스</ProductName>
-                                <ProductCount>수량 : 1개</ProductCount>
+                                <ProductName>{product.name}</ProductName>
+                                <ProductCount>수량 : {count}개</ProductCount>
                             </Stack>
                         </Stack>
                         <Stack direction="row" spacing={1} alignItems="center" py={1}>
@@ -110,7 +129,7 @@ function ConfirmPurchaseModal() {
                             <Minus />
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>주문 Points</SubTitle>
-                                <SubContent sx={{color: '#0094FF', fontFamily: "PretendardM"}}>250 Points</SubContent>
+                                <SubContent sx={{color: '#0094FF', fontFamily: "PretendardM"}}>{product.price*count} Points</SubContent>
                             </PointChange>
                             <Arrow />
                             <PointChange spacing={0.5}>
@@ -120,14 +139,18 @@ function ConfirmPurchaseModal() {
                         </Stack>
                         <Stack py={1} spacing={0.5}>
                             <Description>상품 쿠폰이 다음 연락처로 발송됩니다.</Description>
-                            <SubTitle>010-2581-7018</SubTitle>
+                            <SubTitle>{
+                                Users[sessionStorage.getItem('userId')].phoneNumber.slice(0,3)+"-"+
+                                Users[sessionStorage.getItem('userId')].phoneNumber.slice(3,7)+"-"+
+                                Users[sessionStorage.getItem('userId')].phoneNumber.slice(7,11)
+                            }</SubTitle>
                         </Stack>
                         <Description sx={{textAlign: 'center'}} pt={1}>
-                            <Checkbox size="small" sx={{padding: '5px'}} />
+                            <Checkbox size="small" sx={{padding: '5px'}} onChange={handleCheckChange} />
                             회원 본인은 구매 조건, 주문 내용 확인 및 결제에 동의합니다.
                         </Description>
                     </Stack>
-                    <ConfirmButton onClick={onClickPurchase}>250 Points 결제하기</ConfirmButton>
+                    <ConfirmButton onClick={onClickPurchase}>{product.price*count} Points 결제하기</ConfirmButton>
                 </Body>
             </Modal>
         </>
