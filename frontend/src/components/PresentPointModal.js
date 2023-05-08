@@ -43,13 +43,17 @@ function PresendPointModal() {
         return;
       }
 
-      const recipient = document.getElementById('received').value;
+      const recipient = e.target.received.value;
+      
+      const amountEntered = e.target.amount.value; // Get the amount entered by the user
+      const amountInEther = amountEntered * 0.1; // Multiply the entered value by 0.1 
     
+
        // Send transaction
        await web3.eth.sendTransaction({
         from: wallet,
         to: recipient,
-        value: web3.utils.toWei(e.target.amount.value, 'ether'),
+        value: amountInWei,
       });
     };
 
