@@ -47,6 +47,7 @@ function PresendPointModal() {
       
       const amountEntered = e.target.amount.value; // Get the amount entered by the user
       const amountInEther = amountEntered * 0.1; // Multiply the entered value by 0.1 
+      const amountInWei = web3.utils.toWei(amountInEther.toString(), "ether"); // Convert the amount to wei
     
 
        // Send transaction
@@ -55,8 +56,10 @@ function PresendPointModal() {
         to: recipient,
         value: amountInWei,
       });
-    };
 
+      handleClose(); // Close the modal
+
+    };
     
     return (
         <>
