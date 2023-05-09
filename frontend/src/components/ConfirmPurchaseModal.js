@@ -134,7 +134,7 @@ function ConfirmPurchaseModal({product, count}) {
                             <Arrow />
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>잔여 Points</SubTitle>
-                                <SubContent sx={{color: 'grey'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10 +"" -250 : ""} Points</SubContent>
+                                <SubContent sx={{color: 'grey'}}>{balanceInEther && product.price && count ?(Number.parseFloat(balanceInEther).toFixed(3) * 10 - product.price * count) + "" : ""} Points</SubContent>
                             </PointChange>
                         </Stack>
                         <Stack py={1} spacing={0.5}>

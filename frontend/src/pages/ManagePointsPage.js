@@ -93,6 +93,7 @@ function ManagePointsPage() {
       setPage(value);
     }
 
+
     return (
         <>
             <Header />
