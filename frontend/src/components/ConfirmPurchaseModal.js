@@ -17,7 +17,7 @@ function ConfirmPurchaseModal({product, count}) {
     const [wallet, setWallet] = useState("");
     const [balanceInEther, setBalanceInEther] = useState("");
     const contractABI = PurchaseStuff.abi;
-    const contractAddress= '0x07b8f5eC413b0de252b6071C0DDf3b10017DC04a';
+    const contractAddress= '0xBc4Bd93f1377672Bc7e01b771C2dD0A9c9F6C0a6';
     const web3 = new Web3(window.ethereum);
     const getCurrentWalletBalance = async () => {
       if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
@@ -66,10 +66,20 @@ function ConfirmPurchaseModal({product, count}) {
         const address = accounts[0];
         const PurchaseStuffContract = new web3.eth.Contract(contractABI, contractAddress);
         const value = web3.utils.toWei('25', 'ether');
+
+        let transactionHash;
+
         PurchaseStuffContract.methods.purchase().send({ from: address, value })
           .on('transactionHash', (hash) => {
             setLoading(false);
-            navigate('/puchaseresult');
+            console.log("Transaction Hash:", hash);
+            navigate('/purchaseresult', {
+              state: {
+                product: product,
+                count: count,
+                transactionHash: hash,
+              },
+            });
           })
           .on('error', (error) => {
             console.error(error);
@@ -95,7 +105,7 @@ function ConfirmPurchaseModal({product, count}) {
 
         // 결제 동의가 체크 되었을 때만 결제 진행
         if (checked) {
-            navigate('/puchaseresult', {state: {
+            navigate('/purchaseresult', {state: {
                 product: product,
                 count: count,
             }});
