@@ -18,19 +18,12 @@ import PurchaseResultPage from './pages/PurchaseResultPage';
 
 
 function App() {
-<<<<<<< Updated upstream
-  // 아이디 'dnjsrbwls'으로 항시 로그인
-  sessionStorage.setItem('userId', 'dnjsrbwls');
-  sessionStorage.setItem('userColor', '#'+Math.floor(Math.random()*16777215).toString(16));
-=======
   // console.log(sessionStorage.getItem('userId'))
   // sessionStorage.clear()
   // 아이디 'dnjsrbwls'으로 항시 로그인
   sessionStorage.setItem('userId', 'dnjsrbwls');
   sessionStorage.setItem('userColor', '#'+Math.floor(Math.random()*16777215).toString(16));
   
->>>>>>> Stashed changes
-
   return (
     <>
       <ThemeProvider theme={THEME}>
