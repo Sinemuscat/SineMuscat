@@ -2,11 +2,11 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Stack, TextField, Button } from '@mui/material';
 
-const TopAccBuyingWidget = () => {
+const TopAccBuyingWidget = ({fullHeight=false}) => {
     return (
         <Body>
             <WidgetTitle>Top Accounts - Buying Prodoucts</WidgetTitle>
-            <Box sx={{backgroundColor: 'pink', height: '200px', width: '100%'}} />
+            <Box sx={{backgroundColor: 'pink', height: fullHeight ? '400px' : '200px', width: '100%'}} />
         </Body>
     );
 };

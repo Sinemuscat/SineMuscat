@@ -24,6 +24,10 @@ const FramePage = () => {
     const onClickHome = () => {
         setValue(0);
     };
+
+    const onClickLogin = () => {
+        navigate('/login');
+    };
     
     return (
         <>
@@ -37,7 +41,7 @@ const FramePage = () => {
                         </Stack>
                     </Title>
                     <Stack direction="row" spacing={2}>
-                        <LoginButton size="small"><Typography>Log in</Typography></LoginButton>
+                        <LoginButton size="small" onClick={onClickLogin}><Typography>Log in</Typography></LoginButton>
                         <SearchField component="form">
                           <SearchRoundedIcon sx={{fontSize: 18, color: 'grey'}}/>
                           <InputBase
@@ -73,7 +77,9 @@ const FramePage = () => {
                         }
                     </ToggleButtonGroup>
                 </MenuBox>
-                <Box sx={{flex: 1, marginLeft: '320px'}}>{pages[value]}</Box>
+                <Box sx={{flex: 1, marginLeft: '320px', marginBottom: '30px', width: '700px'}}>
+                    {pages[value]}
+                </Box>
             </Box>
         </>
     );

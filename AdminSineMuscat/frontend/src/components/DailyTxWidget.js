@@ -1,12 +1,75 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Stack, TextField, Button } from '@mui/material';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const DailyTxWidget = () => {
+const data = [
+    {name: 'A', pv: 2400},
+    {name: 'B', pv: 1398},
+    {name: 'A', pv: 2400},
+    {name: 'D', pv: 3908},
+    {name: 'E', pv: 4800},
+    {name: 'D', pv: 3908},
+    {name: 'G', pv: 4300},
+    {name: 'B', pv: 1398},
+    {name: 'E', pv: 4800},
+    {name: 'B', pv: 1398},
+    {name: 'G', pv: 4300},
+    {name: 'G', pv: 4300},
+    {name: 'A', pv: 2400},
+    {name: 'G', pv: 4300},
+    {name: 'A', pv: 2400},
+    {name: 'F', pv: 3800},
+    {name: 'C', pv: 9800},
+    {name: 'D', pv: 3908},
+    {name: 'B', pv: 1398},
+    {name: 'E', pv: 4800},
+    {name: 'F', pv: 3800},
+    {name: 'G', pv: 4300},
+    {name: 'F', pv: 3800},
+    {name: 'F', pv: 3800},
+    {name: 'C', pv: 8800},
+    {name: 'D', pv: 3908},
+    {name: 'E', pv: 4800},
+];
+
+const TinyLineChart = () => {
+    return (
+        <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+            <Tooltip />
+            <Line type="monotone" dataKey="pv" stroke="#0094FF" strokeWidth={2} activeDot={{ r: 8 }} />
+            </LineChart>
+        </ResponsiveContainer>
+    );
+}
+
+const FullLineChart = () => {
+    return (
+        <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data} margin={{top: 10,right: 30,left: 5,bottom: 5}}>   
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="pv" stroke="#0094FF" strokeWidth={2} activeDot={{ r: 8 }} />
+            </LineChart>
+        </ResponsiveContainer>
+    );
+}
+
+const DailyTxWidget = ({fullHeight=false}) => {
     return (
         <Body>
             <WidgetTitle>Daily Transactions</WidgetTitle>
-            <Box sx={{backgroundColor: 'pink', height: '200px', width: '100%'}} />
+            <Box sx={{height: fullHeight ? '400px' : '200px', width: '100%'}}>
+                {
+                    fullHeight ?
+                    <FullLineChart /> :
+                    <TinyLineChart />
+                }
+            </Box>
         </Body>
     );
 };

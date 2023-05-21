@@ -4,6 +4,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import './App.css';
 
 import FramePage from './pages/FramePage';
+import LoginPage from './pages/LoginPage';
+import UserDetailPage from './pages/UserDetailPage';
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<FramePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/userdetail" element={<UserDetailPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
