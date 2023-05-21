@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -11,6 +12,9 @@ import Users from '../data/Users';
 function ManagePointsPage() {
     const [wallet, setWallet] = useState("");
     const [balanceInEther, setBalanceInEther] = useState("");
+
+    // Redux store에서 totalPoints를 가져옴
+    const totalPoints = useSelector(state => state.totalPoints);
 
     useEffect(() => {
       getCurrentWalletBalance();
@@ -103,7 +107,8 @@ function ManagePointsPage() {
                     <Grid xs={6} item pt={2} pl={1}>
                         <Box sx={{fontFamily: 'PretendardM', fontSize: '18px'}}>현재 포인트</Box>
                         <Stack direction="row" alignItems="end" my={1}>
-                            <Box sx={{fontFamily: 'PretendardB', fontSize: '60px'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10: ""}</Box>
+                            {/* <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10: ""}</Box> */}
+                            <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{totalPoints}</Box>
                             <Box sx={{fontFamily: 'PretendardM',fontSize: '24px', padding: '0 0 8px 10px'}}>점</Box>
                         </Stack>
                         <Box sx={{fontSize: '12px', color: 'grey', paddingTop: 4, lineHeight: 1.4}}>

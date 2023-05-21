@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button, Avatar } from '@mui/material';
@@ -8,6 +9,9 @@ import Header from '../components/Header';
 import Users from '../data/Users';
 
 function MyPage() {
+    // Redux store에서 totalPoints를 가져옴
+    const totalPoints = useSelector(state => state.totalPoints);
+
     const navigate = useNavigate();
     
     const onClickEdit = () => {
@@ -72,7 +76,7 @@ function MyPage() {
                         </CustomButton>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>누적 포인트</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{} 점</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{totalPoints} 점</Box>
                         </Stack>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>가용 포인트</Box>

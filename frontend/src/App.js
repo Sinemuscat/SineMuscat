@@ -1,4 +1,5 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import './App.css';
@@ -15,6 +16,7 @@ import EditUserInfoPage from './pages/EditUserInfoPage';
 import CreateCertificationsPage from './pages/CreateCertificationsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import PurchaseResultPage from './pages/PurchaseResultPage';
+import store from './redux/store';
 
 
 function App() {
@@ -25,7 +27,7 @@ function App() {
   sessionStorage.setItem('userColor', '#'+Math.floor(Math.random()*16777215).toString(16));
   
   return (
-    <>
+    <Provider store={store}>
       <ThemeProvider theme={THEME}>
         <BrowserRouter>
           <Routes>
@@ -45,7 +47,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
-    </>
+    </Provider>
   );
 }
 
