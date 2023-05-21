@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button, ToggleButtonGroup, ToggleButton, Pagination } from '@mui/material';
@@ -7,6 +8,9 @@ import Header from '../components/Header';
 import Users from '../data/Users';
 
 function ManageCertificationsPage() {
+    // Redux store에서 totalPoints를 가져옴
+    const totalPoints = useSelector(state => state.totalPoints);
+
     const navigate = useNavigate();
     
     const onClickCreate = () => {
@@ -18,7 +22,6 @@ function ManageCertificationsPage() {
     const [value, setValue] = useState(date[0]);
 
     const [certList, setCertList] = useState(user.certificationList.sort((a, b) => b.id - a.id));
-    const [totalPoints, setTotalPoints] = useState(user.totalPoints);
     const [totalCnt, setTotalCnt] = useState(certList.length);
     const [totalTime, setTotalTime] = useState(certList.reduce((acc, cur) => acc + cur.hour, 0));
 
