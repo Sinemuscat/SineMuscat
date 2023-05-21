@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button, ToggleButton, ToggleButtonGroup, Pagination } from '@mui/material';
@@ -10,40 +9,8 @@ import PresendPointModal from '../components/PresentPointModal';
 import Users from '../data/Users';
 
 function ManagePointsPage() {
-    const [wallet, setWallet] = useState("");
-    const [balanceInEther, setBalanceInEther] = useState("");
-
     // Redux store에서 totalPoints를 가져옴
     const totalPoints = useSelector(state => state.totalPoints);
-
-    useEffect(() => {
-      getCurrentWalletBalance();
-    }, [wallet]);
-
-    const web3 = new Web3(window.ethereum);
-    const getCurrentWalletBalance = async () => {
-      if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
-        try {
-          const accounts = await window.ethereum.request({
-            method: "eth_accounts",
-          });
-          if (accounts.length > 0) {
-            const address = accounts[0];
-            const balanceInWei = await web3.eth.getBalance(address);
-            const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
-            setBalanceInEther(balanceInEther);
-            console.log(`Wallet address: ${address}`);
-            console.log(`Balance in ether: ${balanceInEther}`);
-          } else {
-            console.log("No wallet connected.");
-          }
-        } catch (err) {
-          console.error(err);
-        }
-      } else {
-        console.log("Please install MetaMask.");
-      }
-    };
 
     const navigate = useNavigate();
 
@@ -107,9 +74,8 @@ function ManagePointsPage() {
                     <Grid xs={6} item pt={2} pl={1}>
                         <Box sx={{fontFamily: 'PretendardM', fontSize: '18px'}}>현재 포인트</Box>
                         <Stack direction="row" alignItems="end" my={1}>
-                            {/* <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10: ""}</Box> */}
                             <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{totalPoints}</Box>
-                            <Box sx={{fontFamily: 'PretendardM',fontSize: '24px', padding: '0 0 8px 10px'}}>점</Box>
+                            <Box sx={{fontSize: 24, padding: '0 0 5px 10px'}}>Points</Box>
                         </Stack>
                         <Box sx={{fontSize: '12px', color: 'grey', paddingTop: 4, lineHeight: 1.4}}>
                             <li>포인트 1점당 적립금 1원으로 전환하여 결제 시 사용할 수 있습니다.</li>

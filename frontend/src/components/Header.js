@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { setTotalPoints } from '../redux/actions';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Web3 from 'web3';
@@ -91,7 +90,6 @@ function Header() {
                     <Stack direction="row" spacing={5}>
                         <Box><Menu onClick={onClickCert}>봉사 인증서 관리</Menu></Box>
                         <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
-                        {/* <Box><Menu onClick={onClickManagePoints}>{balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10 + "" : ""} Points</Menu></Box>  */}
                         <Box><Menu onClick={onClickManagePoints}>{totalPoints} Points</Menu></Box> 
                         {
                             login ? 

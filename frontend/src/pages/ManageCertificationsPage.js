@@ -88,8 +88,8 @@ function ManageCertificationsPage() {
                     <Grid item xs={6}>
                         <ResultTitle>사용 가능 포인트</ResultTitle>
                         <Stack direction="row" alignItems="end" mt={1}>
-                            <Box sx={{fontFamily: 'PretendardM', fontSize: 66}}>{totalPoints}</Box>
-                            <Box sx={{fontSize: 24, padding: '0 0 2px 10px'}}>Points</Box>
+                            <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{totalPoints}</Box>
+                            <Box sx={{fontSize: 24, padding: '0 0 5px 10px'}}>Points</Box>
                         </Stack>
                     </Grid>
                     <Grid item xs={6}>

@@ -7,8 +7,7 @@ const Users = {
         birth: '20000808',
         phoneNumber: '01025817018',
         email: 'dnjsrbwls08@gmail.com',
-        walletAddress: '',
-        totalPoints: 185,
+        walletAddress: '0x3e8122ed5447a215cac91556dafd4b4186d46b4f',
         pointList: [
             {id: 0, point: 150, content: '인증서 발급1', date: '2023-02-05'},
             {id: 1, point: -5, content: '포인트 선물', date: '2023-02-10'},
