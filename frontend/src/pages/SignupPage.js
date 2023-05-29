@@ -21,7 +21,7 @@ function SignupPage() {
     const [phoneNumber, setPhoneNumber] = useState('01025817018');
     const [emailInput, setEmailInput] = useState('');
     const [email, setEmail] = useState('gmail.com');
-    const [wallet, setWallet] = useState('1234');
+    const [wallet, setWallet] = useState('');
     
     const navigate = useNavigate();
     const onClickSetStep = () => {
@@ -55,8 +55,8 @@ function SignupPage() {
     };
 
     const onClickCheckId = () => {
-        if (id.length<4 || id.length>10) {
-            alert("아이디는 4~10글자 이내여야합니다.")
+        if (id.length<4 || id.length>20) {
+            alert("아이디는 4~20글자 이내여야합니다.")
             setIdCheck(false)
         }
         else {
@@ -80,8 +80,8 @@ function SignupPage() {
         else if (!passwordCheck) {
             alert("비밀번호 일치 확인이 되지 않았습니다.")
         }
-        else if (id.length<4 || id.length>10) {
-            alert("아이디는 4~10글자 이내여야합니다.")
+        else if (id.length<4 || id.length>20) {
+            alert("아이디는 4~20글자 이내여야합니다.")
         }
         else {
             Users[id] = {

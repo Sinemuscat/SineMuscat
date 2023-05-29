@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -7,45 +8,28 @@ import Close from "@mui/icons-material/CloseRounded";
 import Minus from '@mui/icons-material/RemoveRounded';
 import Arrow from '@mui/icons-material/KeyboardDoubleArrowRightRounded';
 import PurchaseStuff from '../truffle_abis/PurchaseStuff.json';
+import { BeatLoader } from 'react-spinners';
 
-function ConfirmPurchaseModal() {
+import Users from '../data/Users';
+
+function ConfirmPurchaseModal({product, count}) {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
     const [loading, setLoading] = useState(false);
-    const [wallet, setWallet] = useState("");
-    const [balanceInEther, setBalanceInEther] = useState("");
     const contractABI = PurchaseStuff.abi;
-    const contractAddress= '0x07b8f5eC413b0de252b6071C0DDf3b10017DC04a';
-    const web3 = new Web3(window.ethereum);
-    const getCurrentWalletBalance = async () => {
-      if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+    const contractAddress= '0xBc4Bd93f1377672Bc7e01b771C2dD0A9c9F6C0a6';
         
-        try {
-          const accounts = await window.ethereum.request({
-            method: "eth_accounts",
-          });
-          if (accounts.length > 0) {
-            const address = accounts[0];
-            const balanceInWei = await web3.eth.getBalance(address);
-            const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
-            setBalanceInEther(balanceInEther);
-            console.log(`Wallet address: ${address}`);
-            console.log(`Balance in ether: ${balanceInEther}`);
-          } else {
-            console.log("No wallet connected.");
-          }
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    };
-
-    useEffect(() => {
-      getCurrentWalletBalance();
-    }, [wallet]);
+    // Redux store에서 totalPoints를 가져옴
+    const totalPoints = useSelector(state => state.totalPoints);
 
     const handleOpen = () => {
+      if (totalPoints < product.price*count) {
+        alert("포인트가 부족합니다.");
+        return;
+      }
+      else {
         setOpen(true);
+      }
     }
 
     const handleClose = () => {
@@ -54,8 +38,8 @@ function ConfirmPurchaseModal() {
     }
 
     const navigate = useNavigate();
-
     
+    const web3 = new Web3(window.ethereum);
     const purchase = async (value) => {
       setLoading(true);
       const accounts = await window.ethereum.request({
@@ -64,11 +48,25 @@ function ConfirmPurchaseModal() {
       if (accounts.length > 0) {
         const address = accounts[0];
         const PurchaseStuffContract = new web3.eth.Contract(contractABI, contractAddress);
-        const value = web3.utils.toWei('25', 'ether');
+        // 단위 맞춰서 결제
+        const value = web3.utils.toWei(String(product.price*count/10), 'ether');
+
+        let transactionHash;
+
         PurchaseStuffContract.methods.purchase().send({ from: address, value })
           .on('transactionHash', (hash) => {
             setLoading(false);
-            navigate('/puchaseresult');
+            console.log("Transaction Hash:", hash);
+            navigate('/purchaseresult', {
+              state: {
+                product: product,
+                count: count,
+                transactionHash: hash,
+              },
+              replace: true,
+            });
+            // totalPoints 업데이트를 위해 새로고침
+            window.location.reload();
           })
           .on('error', (error) => {
             console.error(error);
@@ -80,17 +78,37 @@ function ConfirmPurchaseModal() {
       }
     }
 
+    const [checked, setChecked] = useState(false);
+    const handleCheckChange = (event) => {
+        if (event.target.checked) {
+          setChecked(true);
+        } else {
+          setChecked(false);
+        }
+    };
 
     const onClickPurchase = () => {
-      purchase();
-      navigate('/puchaseresult');
-    };
+        // 결제 동의가 체크 되었을 때만 결제 진행
+        if (checked) {
+            purchase();
+        }
+        else {
+            alert("결제 동의 항목에 체크가 필요합니다.")
+        }
+      };
 
     return (
         <>
             <PurchaseButton onClick={handleOpen}>구매하기</PurchaseButton>
             <Modal open={open} onClose={handleClose}>
                 <Body spacing={2}>
+                    {
+                        loading ?
+                        <Stack sx={{padding: '100px 80px'}} alignItems="center" spacing={2}>
+                          <BeatLoader color="#0094FF" loading={loading} size={15} />
+                          <Box sx={{color: 'grey'}}>거래를 진행 중입니다.</Box>
+                        </Stack> :
+                        <>
                     <CloseButton onClick={handleClose} title="닫기" />
                     <Title>구매 하시겠습니까?</Title>
                     <Stack spacing={1}>
@@ -98,36 +116,42 @@ function ConfirmPurchaseModal() {
                         <Stack direction="row">
                             <ProductImg />
                             <Stack spacing={0.5} ml={2}>
-                                <ProductName>츄파춥스</ProductName>
-                                <ProductCount>수량 : 1개</ProductCount>
+                                <ProductName>{product.name}</ProductName>
+                                <ProductCount>수량 : {count}개</ProductCount>
                             </Stack>
                         </Stack>
                         <Stack direction="row" spacing={1} alignItems="center" py={1}>
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>보유 Points</SubTitle>
-                                <SubContent sx={{color: 'grey'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10 + "" : ""}  Points</SubContent>
+                                      <SubContent sx={{color: 'grey'}}>{totalPoints}  Points</SubContent>
                             </PointChange>
                             <Minus />
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>주문 Points</SubTitle>
-                                <SubContent sx={{color: '#0094FF', fontFamily: "PretendardM"}}>250 Points</SubContent>
+                                <SubContent sx={{color: '#0094FF', fontFamily: "PretendardM"}}>{product.price*count} Points</SubContent>
                             </PointChange>
                             <Arrow />
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>잔여 Points</SubTitle>
-                                <SubContent sx={{color: 'grey'}}> {balanceInEther ? Number.parseFloat(balanceInEther).toFixed(3)*10 +"" -250 : ""} Points</SubContent>
+                                      <SubContent sx={{color: 'grey'}}>{totalPoints - product.price * count} Points</SubContent>
                             </PointChange>
                         </Stack>
                         <Stack py={1} spacing={0.5}>
                             <Description>상품 쿠폰이 다음 연락처로 발송됩니다.</Description>
-                            <SubTitle>010-2581-7018</SubTitle>
+                            <SubTitle>{
+                                Users[sessionStorage.getItem('userId')].phoneNumber.slice(0,3)+"-"+
+                                Users[sessionStorage.getItem('userId')].phoneNumber.slice(3,7)+"-"+
+                                Users[sessionStorage.getItem('userId')].phoneNumber.slice(7,11)
+                            }</SubTitle>
                         </Stack>
                         <Description sx={{textAlign: 'center'}} pt={1}>
-                            <Checkbox size="small" sx={{padding: '5px'}} />
+                            <Checkbox size="small" sx={{padding: '5px'}} onChange={handleCheckChange} />
                             회원 본인은 구매 조건, 주문 내용 확인 및 결제에 동의합니다.
                         </Description>
                     </Stack>
-                    <ConfirmButton onClick={onClickPurchase}>250 Points 결제하기</ConfirmButton>
+                    <ConfirmButton onClick={onClickPurchase}>{product.price*count} Points 결제하기</ConfirmButton>
+                        </>
+                    }
                 </Body>
             </Modal>
         </>

@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "PretendardL";
+  src: url("fonts/Pretendard-Regular.otf")
+}
+@font-face {
+  font-family: "PretendardM";
+  src: url("fonts/Pretendard-SemiBold.otf")
+}
+@font-face {
+  font-family: "PretendardB";
+  src: url("fonts/Pretendard-ExtraBold.otf")
+}
+
+* {
+  font-family: PretendardL, sans-serif;
+}

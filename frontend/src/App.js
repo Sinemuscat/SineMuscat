@@ -1,4 +1,5 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import './App.css';
@@ -15,13 +16,18 @@ import EditUserInfoPage from './pages/EditUserInfoPage';
 import CreateCertificationsPage from './pages/CreateCertificationsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import PurchaseResultPage from './pages/PurchaseResultPage';
+import store from './redux/store';
+
 
 function App() {
   // console.log(sessionStorage.getItem('userId'))
   // sessionStorage.clear()
-
+  // 아이디 'dnjsrbwls'으로 항시 로그인
+  sessionStorage.setItem('userId', 'dnjsrbwls');
+  sessionStorage.setItem('userColor', '#'+Math.floor(Math.random()*16777215).toString(16));
+  
   return (
-    <>
+    <Provider store={store}>
       <ThemeProvider theme={THEME}>
         <BrowserRouter>
           <Routes>
@@ -37,11 +43,11 @@ function App() {
             <Route path="/edituserinfo" element={<EditUserInfoPage />} />
             <Route path="/createcertifications" element={<CreateCertificationsPage />} />
             <Route path="/productdetail" element={<ProductDetailPage />} />
-            <Route path="/puchaseresult" element={<PurchaseResultPage />} />
+            <Route path="/purchaseresult" element={<PurchaseResultPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
-    </>
+    </Provider>
   );
 }
 
