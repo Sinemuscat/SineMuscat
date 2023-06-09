@@ -51,6 +51,7 @@ func SendRequest(url, username, issuenumber string) string {
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Received a %s request at %s", r.Method, r.URL.Path) // New log
 	var cert Certificate
 	err := json.NewDecoder(r.Body).Decode(&cert)
 	if err != nil {

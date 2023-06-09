@@ -194,7 +194,7 @@ function CreateCertModal({ certificateNumber }) {
 
     return (
         <>
-            <CreateButton onClick={handleOpen}>발급하기</CreateButton>
+            <CreateButton onClick={handleClick}>발급하기</CreateButton>
             <Modal open={open} onClose={handleClose}>
                 <Body alignItems='center' spacing={2}>
                     <CloseButton onClick={handleClose} title="닫기" />
