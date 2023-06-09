@@ -27,8 +27,7 @@ function ConfirmPurchaseModal({product, count}) {
     const [purchaseCount, setPurchaseCount] = useState(0);
     const web3 = new Web3(window.ethereum);
 
-    // Redux store에서 totalPoints를 가져옴
-    const totalPoints = useSelector(state => state.totalPoints);
+
 
     const getCurrentWalletBalance = async () => {
       if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
@@ -74,7 +73,7 @@ function ConfirmPurchaseModal({product, count}) {
   
 
     const handleOpen = () => {
-      if (totalPoints < product.price*count) {
+      if (tokenBalance  < product.price*count) {
         alert("포인트가 부족합니다.");
         return;
       }
@@ -90,7 +89,7 @@ function ConfirmPurchaseModal({product, count}) {
 
     const navigate = useNavigate();
     
-    const purchase = async (value) => {
+    const purchase = async () => {
       setLoading(true);
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
