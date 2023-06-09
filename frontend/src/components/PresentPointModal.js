@@ -3,6 +3,7 @@ import Web3 from "web3";
 import { styled } from '@mui/material/styles';
 import { Box, Button, Modal, Stack, Avatar, TextField, InputAdornment } from '@mui/material'
 import Close from "@mui/icons-material/CloseRounded";
+import { BeatLoader } from 'react-spinners';
 import abiobj2 from "../js/ContractABI2";
 
 const contractAddress2 = "0xc5c7dC1950dE092715a08658812D94A5E76F44AF";
@@ -10,6 +11,7 @@ const contractAddress2 = "0xc5c7dC1950dE092715a08658812D94A5E76F44AF";
 function PresendPointModal() {
   const [open, setOpen] = useState(false);
   const [wallet, setWallet] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleOpen = async () => {
     if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
@@ -50,11 +52,14 @@ function PresendPointModal() {
   
     try {
       // 토큰 전송
+      setLoading(true);
       await contract.methods.transfer(recipient, amountInTokens).send({ from: wallet });
-      handleClose(); // Close the modal
+      setLoading(false);
+      handleClose(); // Close the modal  
     } catch (error) {
       console.error(error);
       alert("포인트 전송에 실패하였습니다. 다시 시도해주세요.");
+      setLoading(false);
     }
   };
     
@@ -63,6 +68,12 @@ function PresendPointModal() {
       <CustomButton variant="contained" onClick={handleOpen}>포인트 선물하기</CustomButton>
       <Modal open={open} onClose={handleClose}>
         <Body alignItems='center' spacing={2}>
+          {loading ?
+            <Stack sx={{padding: '100px 80px'}} alignItems="center" spacing={2}>
+              <BeatLoader color="#0094FF" loading={loading} size={15} />
+              <Box sx={{color: 'grey'}}>거래를 진행 중입니다.</Box>
+            </Stack> :
+            <>
           <CloseButton onClick={handleClose} title="닫기" />
           <Title>포인트 선물</Title>
           <form alignItems='center' onSubmit={handleSubmit}>
@@ -95,6 +106,8 @@ function PresendPointModal() {
             </Stack>
             <PresentButton type="submit">선물하기</PresentButton>
           </form>
+          </>
+          }
         </Body>
       </Modal>
     </>
