@@ -43,6 +43,7 @@ function CreateCertModal({ certificateNumber }) {
     const [volunteerDate, setVolunteerDate] = useState('');
     const [submitDate, setSubmitDate] = useState('');
     const [hour, setHour] = useState('');
+    const [minute, setMinute] = useState(''); // New state variable
     const [point, setPoint] = useState('');
     const [anotherAccount, setAnotherAccount] = useState('0xec2C46385e57223Ba0E754eaAE0b57C6a239019c');
 
@@ -98,11 +99,18 @@ function CreateCertModal({ certificateNumber }) {
             signedTransferFromTransaction.rawTransaction
           );
           console.log(transferFromReceipt);
+          
+          alert('포인트 발급이 완료되었습니다.'); // Add this line
+          // Token 전송이 성공하면 모달을 닫습니다.
+          handleClose();
+          setError(false);
+          
         } else {
           console.log('Please install MetaMask!');
         }
       } catch (err) {
         console.log(err);
+        setError(true);
       }
     };
     
@@ -135,14 +143,17 @@ function CreateCertModal({ certificateNumber }) {
   
         const submitDate = new Date(issueDateStr).toLocaleDateString();
         const volunteerDate = new Date(activityPeriodStr).toLocaleDateString();
-        const hour = parseInt(serviceHoursStr.split('시간')[0], 10) * 60; // 분으로 변환
-        const point = hour;
+        const totalMinutes = parseInt(serviceHoursStr.split('시간')[0], 10) * 60; // 분으로 변환
+        const hour = Math.floor(totalMinutes / 60);
+        const minute = totalMinutes % 60;
+        const point = totalMinutes;
   
         // 상태 변수에 저장합니다.
         setContent(content);
         setVolunteerDate(volunteerDate);
         setSubmitDate(submitDate);
         setHour(hour);
+        setMinute(minute); // Set the minute state
         setPoint(point);
   
         var metaData = {};
@@ -159,8 +170,6 @@ function CreateCertModal({ certificateNumber }) {
         const hash_meta_url = IPFS_URL + result.path;
   
         console.log('hash_meta_url: ' + hash_meta_url);
-  
-        await setMint(hash_meta_url);
   
         async function setMint(metaUrl) {
           // 이더리움 객체 존재 확인
@@ -187,6 +196,17 @@ function CreateCertModal({ certificateNumber }) {
             console.log('Please install MetaMask!');
           }
         }
+
+        setMint(hash_meta_url).then(() => {
+          setOpen(true); // 성공적으로 완료되었을 때만 모달을 열도록 설정
+          setError(false); // 성공적으로 완료되었을 때 오류를 false로 설정
+      }).catch((error) => {
+          console.error(`Error in setMint: ${error}`);
+          setError(true); // setMint에 문제가 있을 경우 오류를 true로 설정
+      });
+
+
+
       } catch (error) {
         console.error(`Error: ${error}`);
       }
