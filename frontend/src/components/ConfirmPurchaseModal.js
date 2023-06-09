@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Web3 from 'web3';
 import { useNavigate } from 'react-router-dom';
@@ -7,20 +7,71 @@ import { Box, Button, Modal, Stack, Checkbox } from '@mui/material'
 import Close from "@mui/icons-material/CloseRounded";
 import Minus from '@mui/icons-material/RemoveRounded';
 import Arrow from '@mui/icons-material/KeyboardDoubleArrowRightRounded';
-import PurchaseStuff from '../truffle_abis/PurchaseStuff.json';
 import { BeatLoader } from 'react-spinners';
-
+import abiobj2 from '../js/ContractABI2';
 import Users from '../data/Users';
+import BigNumber from 'bignumber.js';
+
+const contractAddress2 = '0xc5c7dC1950dE092715a08658812D94A5E76F44AF';
+const recipientAddress = '0xec2C46385e57223Ba0E754eaAE0b57C6a239019c';
+
 
 function ConfirmPurchaseModal({product, count}) {
     const [open, setOpen] = useState(false);
     const [error, setError] = useState(true);
     const [loading, setLoading] = useState(false);
-    const contractABI = PurchaseStuff.abi;
-    const contractAddress= '0xBc4Bd93f1377672Bc7e01b771C2dD0A9c9F6C0a6';
-        
+    const [wallet, setWallet] = useState('');
+    const [balanceInEther, setBalanceInEther] = useState('');
+    const [tokenBalance, setTokenBalance] = useState(0);
+    const [purchaseProduct, setPurchaseProduct] = useState(null);
+    const [purchaseCount, setPurchaseCount] = useState(0);
+    const web3 = new Web3(window.ethereum);
+
     // Redux store에서 totalPoints를 가져옴
     const totalPoints = useSelector(state => state.totalPoints);
+
+    const getCurrentWalletBalance = async () => {
+      if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+        try {
+          const accounts = await window.ethereum.request({
+            method: 'eth_accounts',
+          });
+          if (accounts.length > 0) {
+            const address = accounts[0];
+            const balanceInWei = await web3.eth.getBalance(address);
+            const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+            setBalanceInEther(balanceInEther);
+            console.log(`Wallet address: ${address}`);
+            console.log(`Balance in ether: ${balanceInEther}`);
+          } else {
+            console.log('No wallet connected.');
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+  
+    useEffect(() => {
+      const getBalance = async () => {
+        const accounts = await window.ethereum.request({
+          method: 'eth_accounts',
+        });
+        if (accounts.length > 0) {
+          const address = accounts[0];
+          const MyTokenContract = new web3.eth.Contract(abiobj2, contractAddress2);
+          const balance = await MyTokenContract.methods.balanceOf(address).call();
+          setTokenBalance(web3.utils.fromWei(balance, 'ether'));
+        }
+      };
+  
+      getBalance();
+    }, []);
+  
+    useEffect(() => {
+      getCurrentWalletBalance();
+    }, [wallet]);
+  
 
     const handleOpen = () => {
       if (totalPoints < product.price*count) {
@@ -39,7 +90,6 @@ function ConfirmPurchaseModal({product, count}) {
 
     const navigate = useNavigate();
     
-    const web3 = new Web3(window.ethereum);
     const purchase = async (value) => {
       setLoading(true);
       const accounts = await window.ethereum.request({
@@ -47,36 +97,34 @@ function ConfirmPurchaseModal({product, count}) {
       });
       if (accounts.length > 0) {
         const address = accounts[0];
-        const PurchaseStuffContract = new web3.eth.Contract(contractABI, contractAddress);
-        // 단위 맞춰서 결제
-        const value = web3.utils.toWei(String(product.price*count/10), 'ether');
+        const MyTokenContract = new web3.eth.Contract(abiobj2, contractAddress2);
+        const valueInEther = new BigNumber(product.price).multipliedBy(count);
+        const valueInWei = web3.utils.toWei(valueInEther.toFixed(), 'ether');
+        const tokenValue = new BigNumber(product.price).multipliedBy(count).multipliedBy(10 ** 18); // assuming you want to send `count` amount of tokens
 
-        let transactionHash;
-
-        PurchaseStuffContract.methods.purchase().send({ from: address, value })
-          .on('transactionHash', (hash) => {
-            setLoading(false);
-            console.log("Transaction Hash:", hash);
-            navigate('/purchaseresult', {
-              state: {
-                product: product,
-                count: count,
-                transactionHash: hash,
-              },
-              replace: true,
-            });
-            // totalPoints 업데이트를 위해 새로고침
-            window.location.reload();
+        MyTokenContract.methods
+          .balanceOf(address)
+          .call()
+          .then((balance) => {
+            if (new BigNumber(balance).comparedTo(tokenValue) < 0) {
+              throw new Error('Not enough tokens for transaction');
+            }
+            return MyTokenContract.methods.transfer(recipientAddress, tokenValue.toFixed()).send({ from: address });
           })
-          .on('error', (error) => {
+          .then(() => {
+            console.log('Token transfer successful.');
+            setLoading(false);
+            navigate('/purchaseresult', { state: { product: purchaseProduct, count: purchaseCount } });
+          })
+          .catch((error) => {
             console.error(error);
             setLoading(false);
           });
       } else {
-        console.log("No wallet connected.");
+        console.log('No wallet connected.');
         setLoading(false);
       }
-    }
+    };
 
     const [checked, setChecked] = useState(false);
     const handleCheckChange = (event) => {
@@ -96,6 +144,11 @@ function ConfirmPurchaseModal({product, count}) {
             alert("결제 동의 항목에 체크가 필요합니다.")
         }
       };
+
+      useEffect(() => {
+        setPurchaseProduct(product);
+        setPurchaseCount(count);
+      }, [product, count]);
 
     return (
         <>
@@ -123,18 +176,21 @@ function ConfirmPurchaseModal({product, count}) {
                         <Stack direction="row" spacing={1} alignItems="center" py={1}>
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>보유 Points</SubTitle>
-                                      <SubContent sx={{color: 'grey'}}>{totalPoints}  Points</SubContent>
+                                      <SubContent sx={{ color: 'grey' }}>{tokenBalance ? Number.parseFloat(tokenBalance).toFixed(3) + ' Points' : ''}</SubContent>
                             </PointChange>
                             <Minus />
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>주문 Points</SubTitle>
-                                <SubContent sx={{color: '#0094FF', fontFamily: "PretendardM"}}>{product.price*count} Points</SubContent>
+                                <SubContent sx={{ color: '#0094FF', fontFamily: 'PretendardM' }}>{new BigNumber(product.price).multipliedBy(count).toFixed()} Points</SubContent>
                             </PointChange>
                             <Arrow />
                             <PointChange spacing={0.5}>
                                 <SubTitle sx={{textAlign: 'center'}}>잔여 Points</SubTitle>
-                                      <SubContent sx={{color: 'grey'}}>{totalPoints - product.price * count} Points</SubContent>
-                            </PointChange>
+                                <SubContent sx={{ color: 'grey' }}>
+                                  {tokenBalance && product.price && count
+                                    ? new BigNumber(tokenBalance).minus(new BigNumber(product.price).multipliedBy(count)).toFixed(3) + ' Points'
+                                    : ''}
+                </SubContent>                            </PointChange>
                         </Stack>
                         <Stack py={1} spacing={0.5}>
                             <Description>상품 쿠폰이 다음 연락처로 발송됩니다.</Description>
