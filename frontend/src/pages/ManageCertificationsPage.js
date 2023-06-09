@@ -4,12 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button, ToggleButtonGroup, ToggleButton, Pagination } from '@mui/material';
 import Header from '../components/Header';
-
+import Web3 from "web3";
+import abiobj from "../js/ContractABI.js";
+import abiobj2 from "../js/ContractABI2.js";
+import axios from "axios";
 import Users from '../data/Users';
+
+const contractAddress = "0x6462549A4Dbe5C7267d838c9Ac9418b41346916e";
+const contractAddress2 = '0xc5c7dC1950dE092715a08658812D94A5E76F44AF';
+const anotherAccountPrivateKey = '2e58c63b6ae8ff4deaac3e6506e379b66b209881041e4221ff0d66d35cb63430';
 
 function ManageCertificationsPage() {
     // Redux store에서 totalPoints를 가져옴
-    const totalPoints = useSelector(state => state.totalPoints);
+    //const totalPoints = useSelector(state => state.totalPoints);
 
     const navigate = useNavigate();
     
@@ -20,10 +27,71 @@ function ManageCertificationsPage() {
     const user = Users[sessionStorage.getItem('userId')];
     const date = ["전체", "1주", "1개월", "6개월", "1년"];
     const [value, setValue] = useState(date[0]);
-
     const [certList, setCertList] = useState(user.certificationList.sort((a, b) => b.id - a.id));
+    const [totalPoints, setTotalPoints] = useState(0);
+    const [tokenBalance, settokenBalance] = useState(0);
     const [totalCnt, setTotalCnt] = useState(certList.length);
     const [totalTime, setTotalTime] = useState(certList.reduce((acc, cur) => acc + cur.hour, 0));
+
+    useEffect(() => {
+      const fetchNFTData = async () => {
+        if (
+          typeof window !== "undefined" &&
+          typeof window.ethereum !== "undefined"
+        ) {
+          try {
+            const web3 = new Web3(window.ethereum);
+            const accounts = await web3.eth.getAccounts();
+  
+            if (accounts.length === 0) {
+              console.log("No wallet connected.");
+              return;
+            }
+  
+            const contract = new web3.eth.Contract(abiobj, contractAddress);
+            const tempnftListArray = await contract.methods
+              .getNftTokens(accounts[0])
+              .call();
+  
+            const certDataPromises = tempnftListArray.map(async (nft) => {
+              const ipfsData = await fetchIPFSData(nft.nftTokenURI);
+              return ipfsData;
+            });
+  
+            const certData = await Promise.all(certDataPromises);
+            setCertList(certData);
+            setTotalPoints(
+              certData.reduce((acc, cur) => acc + Number(cur.point), 0)
+            );
+            setTotalCnt(certData.length);
+            setTotalTime(
+              certData.reduce((acc, cur) => acc + Number(cur.hour), 0)
+            );
+  
+            const contract2 = new web3.eth.Contract(abiobj2, contractAddress2);
+            const balance =await contract2.methods.balanceOf(accounts[0]).call();
+            settokenBalance(parseFloat(web3.utils.fromWei(balance, 'ether')).toLocaleString('en-US'));
+            
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      };
+      fetchNFTData();
+    }, []);
+  
+  
+    const fetchIPFSData = async (ipfsAddress) => {
+      try {
+        const response = await axios.get(ipfsAddress);
+        const { name, content, volunteerDate, submitDate, hour, point } =
+          response.data;
+        return { name, content, volunteerDate, submitDate, hour, point };
+      } catch (error) {
+        console.log("Failed to fetch IPFS data.", error);
+        return null;
+      }
+    };
 
     const filterList = (days) => {
         const today = new Date();
@@ -37,6 +105,12 @@ function ManageCertificationsPage() {
 
         return filteredList;
     }
+
+    const [filteredCertList, setFilteredCertList] = useState([]);
+    useEffect(() => {
+      setFilteredCertList(certList.sort((a, b) => b.id - a.id));
+    }, [certList]);
+  
 
     const handleRadioChange = (event, nextValue) => {
       setValue(nextValue);
@@ -88,7 +162,7 @@ function ManageCertificationsPage() {
                     <Grid item xs={6}>
                         <ResultTitle>사용 가능 포인트</ResultTitle>
                         <Stack direction="row" alignItems="end" mt={1}>
-                            <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{totalPoints}</Box>
+                            <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{tokenBalance}</Box>
                             <Box sx={{fontSize: 24, padding: '0 0 5px 10px'}}>Points</Box>
                         </Stack>
                     </Grid>

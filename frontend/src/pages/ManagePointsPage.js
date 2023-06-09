@@ -1,16 +1,60 @@
 import React, { useEffect, useState } from 'react';
+import Web3 from 'web3';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button, ToggleButton, ToggleButtonGroup, Pagination } from '@mui/material';
 import Header from '../components/Header';
 import PresendPointModal from '../components/PresentPointModal';
-
+import abiobj2 from '../js/ContractABI2';
 import Users from '../data/Users';
+
+const contractAddress2 = '0xc5c7dC1950dE092715a08658812D94A5E76F44AF';
+
 
 function ManagePointsPage() {
     // Redux store에서 totalPoints를 가져옴
     const totalPoints = useSelector(state => state.totalPoints);
+    const [wallet, setWallet] = useState("");
+    const [balanceInEther, setBalanceInEther] = useState("");
+    const [tokenBalance, settokenBalance] = useState(0);
+
+    const web3 = new Web3(window.ethereum);
+    const getCurrentWalletBalance = async () => {
+      if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
+        try {
+          const accounts = await window.ethereum.request({
+            method: "eth_accounts",
+          });
+          if (accounts.length > 0) {
+            const address = accounts[0];
+            const balanceInWei = await web3.eth.getBalance(address);
+            const balanceInEther = web3.utils.fromWei(balanceInWei, 'ether');
+            setBalanceInEther(balanceInEther);
+            console.log(`Wallet address: ${address}`);
+            console.log(`Balance in ether: ${balanceInEther}`);
+          } else {
+            console.log("No wallet connected.");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      } else {
+        console.log("Please install MetaMask.");
+      }
+    };
+
+    useEffect(() => {
+    const fetchToken = async () => {
+        const accounts = await web3.eth.getAccounts();
+        const contract2 = new web3.eth.Contract(abiobj2, contractAddress2);
+        const balance =await contract2.methods.balanceOf(accounts[0]).call();
+        settokenBalance(parseFloat(web3.utils.fromWei(balance, 'ether')).toLocaleString('en-US'));
+    };
+    fetchToken();
+    }, [tokenBalance]);
+
+
 
     const navigate = useNavigate();
 
@@ -74,7 +118,7 @@ function ManagePointsPage() {
                     <Grid xs={6} item pt={2} pl={1}>
                         <Box sx={{fontFamily: 'PretendardM', fontSize: '18px'}}>현재 포인트</Box>
                         <Stack direction="row" alignItems="end" my={1}>
-                            <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{totalPoints}</Box>
+                            <Box sx={{fontFamily: 'PretendardB', fontSize: '55px'}}>{tokenBalance}</Box>
                             <Box sx={{fontSize: 24, padding: '0 0 5px 10px'}}>Points</Box>
                         </Stack>
                         <Box sx={{fontSize: '12px', color: 'grey', paddingTop: 4, lineHeight: 1.4}}>

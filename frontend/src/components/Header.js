@@ -4,21 +4,25 @@ import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Web3 from 'web3';
 import { Box, Stack, Avatar, Button } from '@mui/material';
-
+import abiobj2 from '../js/ContractABI2';
 import Users from '../data/Users';
+
+const contractAddress2 = '0xc5c7dC1950dE092715a08658812D94A5E76F44AF';
+
 
 function Header() {
     var login = sessionStorage.getItem('userId')!==null;
     const navigate = useNavigate();
     const [wallet, setWallet] = useState("");
     const [balanceInEther, setBalanceInEther] = useState("");
+    const [tokenBalance, settokenBalance] = useState(0);
 
     // Redux store에서 totalPoints를 가져옴
     const totalPoints = useSelector(state => state.totalPoints);
 
-    useEffect(() => {
-      getCurrentWalletBalance();
-    }, [wallet]);
+    // useEffect(() => {
+    //   getCurrentWalletBalance();
+    // }, [wallet]);
     
     const onClickHome = () => {
         navigate('/');
@@ -82,6 +86,16 @@ function Header() {
       }
     };
 
+    useEffect(() => {
+      const fetchToken = async () => {
+          const accounts = await web3.eth.getAccounts();
+          const contract2 = new web3.eth.Contract(abiobj2, contractAddress2);
+          const balance =await contract2.methods.balanceOf(accounts[0]).call();
+          settokenBalance(parseFloat(web3.utils.fromWei(balance, 'ether')).toLocaleString('en-US'));
+      };
+      fetchToken();
+      }, [tokenBalance]);
+
     return (
         <>
             <Frame>
@@ -90,7 +104,7 @@ function Header() {
                     <Stack direction="row" spacing={5}>
                         <Box><Menu onClick={onClickCert}>봉사 인증서 관리</Menu></Box>
                         <Box><Menu onClick={onClickUsePoints}>포인트 사용</Menu></Box>
-                        <Box><Menu onClick={onClickManagePoints}>{totalPoints} Points</Menu></Box> 
+                        <Box><Menu onClick={onClickManagePoints}>{tokenBalance} Points</Menu></Box> 
                         {
                             login ? 
                             <LoginAvatar onClick={onClickUser}>{Users[sessionStorage.getItem('userId')].name.substring(1,3)}</LoginAvatar> :

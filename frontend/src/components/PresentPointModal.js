@@ -3,12 +3,14 @@ import Web3 from "web3";
 import { styled } from '@mui/material/styles';
 import { Box, Button, Modal, Stack, Avatar, TextField, InputAdornment } from '@mui/material'
 import Close from "@mui/icons-material/CloseRounded";
+import abiobj2 from "../js/ContractABI2";
+
+const contractAddress2 = "0xc5c7dC1950dE092715a08658812D94A5E76F44AF";
+
 
 function PresendPointModal() {
     const [open, setOpen] = useState(false);
     const [wallet, setWallet] = useState("");
-    const [balanceInEther, setBalanceInEther] = useState("");
-    const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -34,31 +36,16 @@ function PresendPointModal() {
     const handleSubmit = async (e) => {
       e.preventDefault();
     
-      // Connect the wallet
-      await onClickWallet();
-
-      // Check if wallet is connected
-      if (wallet === '') {
-        console.log('Wallet not connected');
-        return;
-      }
-
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(abiobj2, contractAddress2);
       const recipient = e.target.received.value;
-      
-      const amountEntered = e.target.amount.value; // Get the amount entered by the user
-      const amountInEther = amountEntered * 0.1; // Multiply the entered value by 0.1 
-      const amountInWei = web3.utils.toWei(amountInEther.toString(), "ether"); // Convert the amount to wei
-    
+      const amountEntered = e.target.amount.value;
+  
+      const amountInTokens = web3.utils.toWei(amountEntered, "ether");
 
-       // Send transaction
-       await web3.eth.sendTransaction({
-        from: wallet,
-        to: recipient,
-        value: amountInWei,
-      });
-
+      // 토큰 전송
+      await contract.methods.transfer(recipient, amountInTokens).send({ from: wallet });
       handleClose(); // Close the modal
-
     };
     
     return (
