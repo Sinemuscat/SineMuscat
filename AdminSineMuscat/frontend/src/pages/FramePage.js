@@ -10,7 +10,6 @@ import TopAccCertBoard from '../pages/TopAccCertBoard';
 import TopAccBuyingBoard from '../pages/TopAccBuyingBoard';
 
 const FramePage = () => {
-    
     const menuItems = ["Main Dashboard", "Daily Transactions", "Top Accounts - Certifications", "Top Accounts - Buy Prodoucts"];
     const pages = [<MainBoard />, <DailyTxBoard />, <TopAccCertBoard />, <TopAccBuyingBoard />];
     const [value, setValue] = useState(0);
@@ -23,10 +22,6 @@ const FramePage = () => {
 
     const onClickHome = () => {
         setValue(0);
-    };
-
-    const onClickLogin = () => {
-        navigate('/login');
     };
     
     return (
@@ -41,7 +36,6 @@ const FramePage = () => {
                         </Stack>
                     </Title>
                     <Stack direction="row" spacing={2}>
-                        <LoginButton size="small" onClick={onClickLogin}><Typography>Log in</Typography></LoginButton>
                         <SearchField component="form">
                           <SearchRoundedIcon sx={{fontSize: 18, color: 'grey'}}/>
                           <InputBase

@@ -9,29 +9,39 @@ const columns = [
     { id: 'name', label: 'Name', minWidth: 50 },
     { id: 'balance', label: 'Balance', minWidth: 120, format: (value) => value + ' ETH' },
     { id: 'txnCnt', label: 'Txn Count', minWidth: 80, format: (value) => value.toFixed(2) },
-  ];
-  
-  function createData(no, address, name, balance, txnCnt) {
-    return { no, address, name, balance, txnCnt };
-  }
-  
-  const rows = [
-    createData(0, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 21072466.19432501 , 3287263.0),
-    createData(1, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 9596961, 9596961.0),
-    createData(2, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 301340, 301340.0),
-    createData(3, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 9833520, 9833520.0),
-    createData(4, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 9984670, 9984670.0),
-    createData(5, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 7692024, 7692024.0),
-    createData(6, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 357578, 357578.0),
-    createData(7, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 70273, 70273.0),
-    createData(8, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 1972550, 1972550.0),
-    createData(9, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 377973, 377973.0),
-    createData(10, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 640679, 640679.0),
-    createData(11, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 242495, 242495.0),
-    createData(12, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 17098246, 17098246.0),
-    createData(13, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 923768, 923768.0),
-    createData(14, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 8515767, 8515767.0),
-  ];
+];
+
+const columns2 = [
+  { id: 'no', label: '#', minWidth: 5 },
+  // { id: 'address', label: 'Address', minWidth: 50 },
+  { id: 'name', label: 'Name', minWidth: 50 },
+  { id: 'address', label: 'Address', minWidth: 50 },
+  { id: 'cnt', label: 'Count', minWidth: 20, format: (value) => value + ' 개' },
+  { id: 'balance', label: 'Balance', minWidth: 40, format: (value) => value + ' ETH' },
+];
+
+
+function createData(no, address, name, cnt, balance, txnCnt) {
+    return { no, address, name, cnt, balance, txnCnt };
+}
+
+const rows = [
+    createData(0, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 2106 , 3263.0),
+    createData(1, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 9591, 9591.0),
+    createData(2, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 301, 30130),
+    createData(3, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 9830, 9830.0),
+    createData(4, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 9980, 9980.0),
+    createData(5, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 7694, 7694.0),
+    createData(6, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 357, 35750),
+    createData(7, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 702, 7027),
+    createData(8, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 1970, 1970.0),
+    createData(9, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 377, 37790),
+    createData(10, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 649, 640.0),
+    createData(11, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 245, 242.0),
+    createData(12, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 17246, 18246.0),
+    createData(13, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 928, 923.0),
+    createData(14, '0x00000000219ab540356cBB839Cbe05303d7705Fa', '원규진', 10, 8567, 8567.0),
+];
 
 const UserTable = () => {
     const [page, setPage] = React.useState(0);
@@ -50,7 +60,7 @@ const UserTable = () => {
 
     const onClickAddress = (address) => {
         navigate('/userdetail', {state: address});
-      };
+    };
 
     return (
         <>
@@ -107,6 +117,39 @@ const UserTable = () => {
     );
 }
 
+const UserTableDense = () => {
+  return (
+      <>
+          <TableContainer>
+            <Table>
+              <TableBody>
+                {rows
+                  .map((row) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                        {columns2.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} style={{ minWidth: column.minWidth }}>
+                              {column.id === 'address'
+                                ? column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : value.substring(0, 10) + '...'
+                                : value
+                              }
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+      </>
+  );
+};
+
 const TopAccCertWidget = ({fullHeight=false}) => {
     return (
         <Body>
@@ -115,7 +158,9 @@ const TopAccCertWidget = ({fullHeight=false}) => {
                 {
                     fullHeight ?
                     <UserTable /> :
-                    <Box></Box>
+                    <Box sx={{height: '300px', overflowY: 'scroll', overflowX: 'hidden'}}>
+                      <UserTableDense />
+                    </Box>
                 }
             </Box>
         </Body>
