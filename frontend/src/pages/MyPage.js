@@ -12,6 +12,10 @@ function MyPage() {
     // Redux store에서 totalPoints를 가져옴
     const totalPoints = useSelector(state => state.totalPoints);
 
+    const user = Users[sessionStorage.getItem('userId')];
+    const totalTime = user.certificationList.reduce((acc, cur) => acc + cur.hour, 0);
+    const unusedProduct = user.purchaseList.filter(item => !item.isUsed).length;
+
     const navigate = useNavigate();
     
     const onClickEdit = () => {
@@ -44,9 +48,9 @@ function MyPage() {
             <Body container spacing={2}>
                 <Grid item xs={6} alignItems="center">
                     <Item alignItems="center" spacing={2}>
-                        <UserAvatar>{Users[sessionStorage.getItem('userId')].name.substring(1,3)}</UserAvatar>
+                        <UserAvatar>{user.name.substring(1,3)}</UserAvatar>
                         <Stack direction="row" alignItems="end">
-                            <Box sx={{fontSize: 25, fontFamily: 'PretendardB'}}>{Users[sessionStorage.getItem('userId')].name}</Box>
+                            <Box sx={{fontSize: 25, fontFamily: 'PretendardB'}}>{user.name}</Box>
                             <Box sx={{fontSize: 16, margin: '0 0 2px 4px', fontFamily: 'PretendardB'}}>님</Box>
                         </Stack>
                         <Stack>
@@ -78,10 +82,6 @@ function MyPage() {
                             <Box sx={{color: 'grey'}}>누적 포인트</Box>
                             <Box sx={{color: 'black', marginLeft: '5px'}}>{totalPoints} 점</Box>
                         </Stack>
-                        <Stack direction="row">
-                            <Box sx={{color: 'grey'}}>가용 포인트</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{Users[sessionStorage.getItem('userId')].totalPoints} 점</Box>
-                        </Stack>
                     </Item>
                 </Grid>
                 <Grid item xs={6} alignItems="center">
@@ -94,11 +94,11 @@ function MyPage() {
                         </CustomButton>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>총 봉사 횟수</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{Users[sessionStorage.getItem('userId')].certificationList.length} 회</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{user.certificationList.length} 회</Box>
                         </Stack>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>총 봉사 시간</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{}시간 {}분</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{Math.floor(totalTime/60)}시간 {totalTime%60}분</Box>
                         </Stack>
                     </Item>
                 </Grid>
@@ -112,11 +112,11 @@ function MyPage() {
                         </CustomButton>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>총 구매 횟수</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{Users[sessionStorage.getItem('userId')].purchaseList.length} 회</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{user.purchaseList.length} 회</Box>
                         </Stack>
                         <Stack direction="row">
                             <Box sx={{color: 'grey'}}>미사용 상품</Box>
-                            <Box sx={{color: 'black', marginLeft: '5px'}}>{} 개</Box>
+                            <Box sx={{color: 'black', marginLeft: '5px'}}>{unusedProduct} 개</Box>
                         </Stack>
                     </Item>
                 </Grid>

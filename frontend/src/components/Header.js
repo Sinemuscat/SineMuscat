@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Web3 from 'web3';
@@ -19,6 +19,8 @@ function Header() {
 
     // Redux store에서 totalPoints를 가져옴
     const totalPoints = useSelector(state => state.totalPoints);
+
+    const dispatch = useDispatch();
 
     // useEffect(() => {
     //   getCurrentWalletBalance();
@@ -92,6 +94,7 @@ function Header() {
           const contract2 = new web3.eth.Contract(abiobj2, contractAddress2);
           const balance =await contract2.methods.balanceOf(accounts[0]).call();
           settokenBalance(parseFloat(web3.utils.fromWei(balance, 'ether')).toLocaleString('en-US'));
+          dispatch({ type: 'UPDATE_TOTAL_POINTS', payload: parseFloat(web3.utils.fromWei(balance, 'ether')).toLocaleString('en-US') });
       };
       fetchToken();
       }, [tokenBalance]);
