@@ -26,13 +26,15 @@ function ProductDetailPage() {
             <Body>
                 <Grid container mt={2}>
                     <Grid item xs={4.5}>
-                        <Box sx={{width: '100%', height: '250px', border: '1px solid lightgrey'}}></Box>
+                        <Box sx={{width: '300px', height: '300px'}}>
+                            <img src={`/product_imgs/${product.id}.png`} alt={product.id} width="100%" height="100%" />
+                        </Box>
                     </Grid>
                     <Grid item xs={1.5}></Grid>
                     <Grid item xs={6}>
                         <Stack>
-                            <Brand>{product.brand}</Brand>
-                            <ProductName>{product.name}</ProductName>
+                            <Brand mt={2}>{product.brand}</Brand>
+                            <ProductName mb={4}>{product.name}</ProductName>
                             <Stack direction="row" sx={{padding: '5px'}} alignItems="center" justifyContent="space-between">
                                 <DetailTitle>가격</DetailTitle>
                                 <DetailContent>{product.price} Points</DetailContent>
@@ -57,7 +59,17 @@ function ProductDetailPage() {
                     </Grid>
                 </Grid>
                 <Stack sx={{width: '100%', backgroundColor: '#F5F5F5'}} mt={4}>
-                    <Box sx={{padding: '20px 20px 200px 20px'}}>제품에 대한 상세 설명입니다. {product.detail}</Box>
+                    <Box sx={{padding: '20px 20px 20px 20px'}}>
+                        <Box sx={{fontFamily: 'PretendardM'}} mb={1}>제품에 대한 상세 설명입니다.</Box>
+                        {
+                            product.detail.map((v, id) => {
+                                return (
+                                    v ? <Box key={id} sx={{lineHeight: 1.2}}>{v}</Box>
+                                    : <Box key={id} my={1} />
+                                );
+                            })
+                        }
+                    </Box>
                 </Stack>
             </Body>
         </>

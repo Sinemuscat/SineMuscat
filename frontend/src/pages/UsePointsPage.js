@@ -22,9 +22,6 @@ function UsePointsPage() {
     const category = ["전체", "카페/베이커리", "외식", "편의점", "뷰티"];
     const [value, setValue] = useState(category[0]);
 
-    // const sorting = ["최신순", "낮은 가격순", "높은 가격순", "제품명순"];
-    // const [method, setMethod] = useState(sorting[0]);
-
     const [productList, setProductList] = useState(Products);
 
     const handleRadioChange = (event, nextValue) => {
@@ -73,24 +70,16 @@ function UsePointsPage() {
                         }
                     </ToggleButtonGroup>
                 </Stack>
-                <Stack direction="row" justifyContent="end" alignItems="center" my={1}>
-                    {/* <Box sx={{color: 'black', fontSize: '12px'}}><Checkbox size="small" />구매가능 물건만</Box> */}
-                    {/* <ToggleButtonGroup value={method} exclusive onChange={handleSortChange}>
-                        {
-                            sorting.map((v, id) => {
-                                return <ToggleButton value={v} key={id}>{v}</ToggleButton>
-                            })
-                        }
-                    </ToggleButtonGroup> */}
-                </Stack>
-                <Stack alignItems="center">
+                <Stack alignItems="center" mt={2}>
                     <Grid container spacing={2}>
                         {
                             data.map((value, idx) => {
                                 return (
                                     <Grid item xs={3} key={idx}>
                                         <Stack>
-                                            <ProductImage onClick={() => onClickProduct(value)}></ProductImage>
+                                            <ProductImage onClick={() => onClickProduct(value)}>
+                                                <img src={`/product_imgs/${value.id}.png`} alt={value.id} width="100%" height="100%" />
+                                            </ProductImage>
                                             <Brand>{value.brand}</Brand>
                                             <ProductName>{value.productName}</ProductName>
                                             <Price>{value.price} Points</Price>
@@ -157,7 +146,6 @@ const Brand = styled(Box)(() => ({
 const ProductImage = styled(Box)(() => ({
     width: '100%', 
     height: '250px', 
-    backgroundColor: '#F0F0F0',
     '&:hover': {
         backgroundColor: '#F7F7F7',
         cursor: 'pointer',

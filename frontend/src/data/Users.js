@@ -44,9 +44,9 @@ const Users = {
             {id: 23, volunteerDate: '2023-04-30', submitDate: '2023-04-14', hour: 180, point: 180, content: '인증서 발급4'},
         ],
         purchaseList: [
-            {id: 0, isUsed: true, purchaseDate: '2023-03-10', productInfo: {brand: '스타벅스', productName: '아메리카노 T'}},
-            {id: 1, isUsed: true, purchaseDate: '2023-03-20', productInfo: {brand: 'CU', productName: '츄파춥스'}},
-            {id: 2, isUsed: false, purchaseDate: '2023-03-22', productInfo: {brand: '스타벅스', productName: '카페라떼 T'}},
+            {id: 0, isUsed: true, purchaseDate: '2023-03-10', productInfo: {id: 2, brand: '스타벅스', productName: '아이스 카페 아메리카노 T'}},
+            {id: 1, isUsed: true, purchaseDate: '2023-03-20', productInfo: {id: 3, brand: 'CU', productName: '빙그레)바나나우유240ML'}},
+            {id: 2, isUsed: false, purchaseDate: '2023-03-22', productInfo: {id: 17, brand: '스타벅스', productName: '아이스 카페 라떼 T'}},
         ],
     },
     test: {

@@ -17,9 +17,9 @@ function PurchaseHistoryPage() {
                     Users[sessionStorage.getItem('userId')].purchaseList.map((value, idx) => {
                         if (value.isUsed===false)
                             return (
-                                <HistoryStack container>
+                                <HistoryStack container key={idx}>
                                     <Grid item xs={2}>
-                                        <ProductImg />
+                                        <ProductImg><img src={`/product_imgs/${value.productInfo.id}.png`} alt={value.productInfo.id} width="100%" height="100%" /></ProductImg>
                                     </Grid>
                                     <Grid item xs={8}>
                                         <ProductDetail justifyContent="space-between">
@@ -27,7 +27,7 @@ function PurchaseHistoryPage() {
                                                 <Brand>{value.productInfo.brand}</Brand>
                                                 <ProductName>{value.productInfo.productName}</ProductName>
                                             </Stack>
-                                            <Date>{value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 구매 / {value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 까지</Date>
+                                            <Date>{value.purchaseDate} 구매 / {value.purchaseDate} 까지</Date>
                                         </ProductDetail>
                                     </Grid>
                                     <Grid item xs={2}>
@@ -35,7 +35,7 @@ function PurchaseHistoryPage() {
                                     </Grid>
                                 </HistoryStack>
                             )
-                        else return <></>
+                        else return null
                     })
                 }
                 <Badge sx={{width: '165px'}}>사용완료 및 유효기간 만료</Badge>
@@ -43,9 +43,9 @@ function PurchaseHistoryPage() {
                     Users[sessionStorage.getItem('userId')].purchaseList.map((value, idx) => {
                         if (value.isUsed===true)
                             return (
-                                <HistoryStack container>
+                                <HistoryStack container key={idx}>
                                     <Grid item xs={2}>
-                                        <ProductImg />
+                                    <ProductImg sx={{opacity: 0.4, filter: `brightness(0.9)`}}><img src={`/product_imgs/${value.productInfo.id}.png`} alt={value.productInfo.id} width="100%" height="100%" /></ProductImg>
                                     </Grid>
                                     <Grid item xs={8}>
                                         <ProductDetail justifyContent="space-between">
@@ -53,7 +53,7 @@ function PurchaseHistoryPage() {
                                                 <Brand sx={{color: 'lightgrey'}}>{value.productInfo.brand}</Brand>
                                                 <ProductName sx={{color: 'lightgrey'}}>{value.productInfo.productName}</ProductName>
                                             </Stack>
-                                            <Date sx={{color: 'lightgrey'}}>{value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 구매 / {value.purchaseDate.substring(0,4)}-{value.purchaseDate.substring(4,6)}-{value.purchaseDate.substring(6,8)} 까지</Date>
+                                            <Date sx={{color: 'lightgrey'}}>{value.purchaseDate} 구매 / {value.purchaseDate} 까지</Date>
                                         </ProductDetail>
                                     </Grid>
                                     <Grid item xs={2}>
@@ -61,7 +61,7 @@ function PurchaseHistoryPage() {
                                     </Grid>
                                 </HistoryStack>
                             )
-                            else return <></>
+                            else return null
                     })
                 }
             </Body>

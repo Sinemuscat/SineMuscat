@@ -166,7 +166,7 @@ function ConfirmPurchaseModal({product, count}) {
                     <Stack spacing={1}>
                         <SubTitle>상품 정보</SubTitle>
                         <Stack direction="row">
-                            <ProductImg />
+                            <ProductImg><img src={`/product_imgs/${product.id}.png`} alt={product.id} width="100%" height="100%" /></ProductImg>
                             <Stack spacing={0.5} ml={2}>
                                 <ProductName>{product.name}</ProductName>
                                 <ProductCount>수량 : {count}개</ProductCount>
