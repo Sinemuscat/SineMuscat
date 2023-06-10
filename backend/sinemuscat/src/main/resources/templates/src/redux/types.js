@@ -1,0 +1,1 @@
+export const SET_TOTAL_POINTS = 'SET_TOTAL_POINTS';
