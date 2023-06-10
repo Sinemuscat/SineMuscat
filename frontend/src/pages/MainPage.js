@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Button } from '@mui/material';
@@ -10,10 +10,22 @@ import main1 from '../images/main1.png';
 import main2 from '../images/main2.png';
 import main3 from '../images/main3.png';
 import Header from '../components/Header';
+import axios from 'axios';
 
 function MainPage() {
     var login = sessionStorage.getItem('userId')!==null;
     const navigate = useNavigate();
+
+    const [message, setMessage] = useState(['heloo'])
+    useEffect(()=>{
+        fetch('http://localhost:8080/api/user')
+            .then(res => res.json() )
+            .then(data => {
+                console.log(data)
+                setMessage(data)
+            })
+            .catch(err => console.log(err))
+    }, [])
 
     const onClickCert = () => {
         if(login === false) {
@@ -83,6 +95,7 @@ function MainPage() {
                 </Grid>
                 <Grid item sx={{paddingLeft: '80px'}}><img src={main3} width={300} alt="img"/></Grid>
             </Banner>
+
         </>
     );
 }
