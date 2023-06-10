@@ -16,14 +16,15 @@ function MainPage() {
     var login = sessionStorage.getItem('userId')!==null;
     const navigate = useNavigate();
 
-    const [message, setMessage] = useState('d')
+    const [message, setMessage] = useState(['heloo'])
     useEffect(()=>{
-        async function get() {
-            const res = await axios.get("http://localhost:8080/hello")
-            setMessage(res.data);
-        }
-
-        get();
+        fetch('http://localhost:8080/api/user')
+            .then(res => res.json() )
+            .then(data => {
+                console.log(data)
+                setMessage(data)
+            })
+            .catch(err => console.log(err))
     }, [])
 
     const onClickCert = () => {
@@ -94,7 +95,6 @@ function MainPage() {
                 </Grid>
                 <Grid item sx={{paddingLeft: '80px'}}><img src={main3} width={300} alt="img"/></Grid>
             </Banner>
-            <p>{message}</p>
 
         </>
     );
