@@ -9,6 +9,9 @@ import PresendPointModal from '../components/PresentPointModal';
 import abiobj2 from '../js/ContractABI2';
 import Users from '../data/Users';
 
+import img1 from '../images/illust1.jpg';
+import img2 from '../images/illust2.jpg';
+
 const contractAddress2 = '0xc5c7dC1950dE092715a08658812D94A5E76F44AF';
 
 
@@ -122,21 +125,21 @@ function ManagePointsPage() {
                             <Box sx={{fontSize: 24, padding: '0 0 5px 10px'}}>Points</Box>
                         </Stack>
                         <Box sx={{fontSize: '12px', color: 'grey', paddingTop: 4, lineHeight: 1.4}}>
-                            <li>포인트 1점당 적립금 1원으로 전환하여 결제 시 사용할 수 있습니다.</li>
-                            <li>적립금 전환은 1,000점 이상부터 가능합니다.</li>
+                            <li>포인트는 포인트 사용 페이지에서 기프티콘 구매에 사용될 수 있습니다.</li>
+                            <li>포인트는 환급되지 않으며, 현금으로 전환될 수 없습니다.</li>
                             <li>포인트 선물은 잔여 포인트가 100포인트 이상 되어야 가능합니다.</li>
-                            <li>소멸된 포인트는 다시 전환할 수 없습니다.</li>
+                            <li>부정확한 인증서나 사기적인 방법으로 얻은 포인트는 무효화될 수 있습니다.</li>
                         </Box>
                     </Grid>
                     <Grid xs={3} item>
                         <Banner>
-                            <Box sx={{height: 150}}></Box>
+                            <Box sx={{width: '100%', height: '100%'}}><img src={img1} width="100%" height="100%" /></Box>
                             <PresendPointModal />
                         </Banner>
                     </Grid>
                     <Grid xs={3} item>
                         <Banner>
-                            <Box sx={{height: 150}}></Box>
+                        <Box sx={{width: '100%', height: '100%'}}><img src={img2} width="100%" height="100%" /></Box>
                             <CustomButton onClick={onClickUsePoints} variant="contained">물품 구매하기</CustomButton>
                         </Banner>
                     </Grid>
@@ -198,8 +201,6 @@ const Body = styled(Stack)(() => ({
 
 const Banner = styled(Grid)(() => ({
     textAlign: 'center',
-    backgroundColor: '#F5F5F5',
-    padding: 20,
     margin: 10,
 }));
 
