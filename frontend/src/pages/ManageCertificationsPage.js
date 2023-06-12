@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button, ToggleButtonGroup, ToggleButton, Pagination } from '@mui/material';
@@ -177,9 +177,9 @@ function ManageCertificationsPage() {
                         <Stack direction="row" alignItems="center" mt={2}>
                             <ResultTitle>총 봉사 시간</ResultTitle>
                             <Stack direction="row" alignItems="end">
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{Math.floor(totalTime/60)}</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{Math.floor(totalTime)}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 10px 4px 4px'}}>시간</Box>
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{totalTime%60}</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{0}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 0 4px 4px'}}>분</Box>
                             </Stack>
                         </Stack>
@@ -208,7 +208,7 @@ function ManageCertificationsPage() {
                                         <Grid container>
                                             <Grid item xs={4}>봉사일자 : {value.volunteerDate}</Grid>
                                             <Grid item xs={4}>발급일자 : {value.submitDate}</Grid>
-                                            <Grid item xs={4}>봉사시간 : {Math.floor(value.hour/60)}시간 {value.hour%60}분</Grid>
+                                            <Grid item xs={4}>봉사시간 : {Math.floor(value.hour)}시간 {0}분</Grid>
                                         </Grid>
                                     </Grid>
                                     <ListSubItem item xs={2} sx={{color: '#0094FF'}}>{value.point} Point</ListSubItem>
