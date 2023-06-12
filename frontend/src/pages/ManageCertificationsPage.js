@@ -27,7 +27,7 @@ function ManageCertificationsPage() {
     const user = Users[sessionStorage.getItem('userId')];
     const date = ["전체", "1주", "1개월", "6개월", "1년"];
     const [value, setValue] = useState(date[0]);
-    const [certList, setCertList] = useState(user.certificationList.sort((a, b) => b.id - a.id));
+    const [certList, setCertList] = useState(user.certificationList.sort((a, b) => a.id - b.id));
     const [totalPoints, setTotalPoints] = useState(0);
     const [tokenBalance, settokenBalance] = useState(0);
     const [totalCnt, setTotalCnt] = useState(certList.length);
@@ -96,7 +96,7 @@ function ManageCertificationsPage() {
     const filterList = (days) => {
         const today = new Date();
         const filteredList = user.certificationList.filter((item) => {
-            const volunteerDate = new Date(item.volunteerDate); // 인증서 발급일
+            const volunteerDate = new Date(item.submitDate); // 인증서 발급일
             const diffTime = Math.abs(today - volunteerDate); // 두 날짜의 차이 (밀리초 단위)
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 차이 일수
           
@@ -108,7 +108,7 @@ function ManageCertificationsPage() {
 
     const [filteredCertList, setFilteredCertList] = useState([]);
     useEffect(() => {
-      setFilteredCertList(certList.sort((a, b) => b.id - a.id));
+      setFilteredCertList(certList.sort((a, b) => a.id - b.id));
     }, [certList]);
   
 
@@ -118,19 +118,19 @@ function ManageCertificationsPage() {
 
       switch (nextValue) {
         case "1주":
-            setCertList(filterList(7).sort((a, b) => b.id - a.id));
+            setCertList(filterList(7).sort((a, b) => a.id - b.id));
             break;
         case "1개월":
-            setCertList(filterList(30).sort((a, b) => b.id - a.id));
+            setCertList(filterList(30).sort((a, b) => a.id - b.id));
             break;
         case "6개월":
-            setCertList(filterList(183).sort((a, b) => b.id - a.id));
+            setCertList(filterList(183).sort((a, b) => a.id - b.id));
             break;
         case "1년":
-            setCertList(filterList(365).sort((a, b) => b.id - a.id));
+            setCertList(filterList(365).sort((a, b) => a.id - b.id));
             break;
         default:
-            setCertList(user.certificationList.sort((a, b) => b.id - a.id));
+            setCertList(user.certificationList.sort((a, b) => a.id - b.id));
             break;
         }
     };
@@ -177,9 +177,9 @@ function ManageCertificationsPage() {
                         <Stack direction="row" alignItems="center" mt={2}>
                             <ResultTitle>총 봉사 시간</ResultTitle>
                             <Stack direction="row" alignItems="end">
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{Math.floor(totalTime)}</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{Math.floor(totalTime/60)}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 10px 4px 4px'}}>시간</Box>
-                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{0}</Box>
+                                <Box sx={{fontFamily: 'PretendardM', fontSize: 30}}>{Math.floor(totalTime%60)}</Box>
                                 <Box sx={{fontSize: 18, padding: '0 0 4px 4px'}}>분</Box>
                             </Stack>
                         </Stack>
@@ -208,7 +208,7 @@ function ManageCertificationsPage() {
                                         <Grid container>
                                             <Grid item xs={4}>봉사일자 : {value.volunteerDate}</Grid>
                                             <Grid item xs={4}>발급일자 : {value.submitDate}</Grid>
-                                            <Grid item xs={4}>봉사시간 : {Math.floor(value.hour)}시간 {0}분</Grid>
+                                            <Grid item xs={4}>봉사시간 : {Math.floor(value.hour/60)}시간 {Math.floor(value.hour%60)}분</Grid>
                                         </Grid>
                                     </Grid>
                                     <ListSubItem item xs={2} sx={{color: '#0094FF'}}>{value.point} Point</ListSubItem>

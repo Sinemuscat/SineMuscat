@@ -27,11 +27,11 @@ function PurchaseHistoryPage() {
                                                 <Brand>{value.productInfo.brand}</Brand>
                                                 <ProductName>{value.productInfo.productName}</ProductName>
                                             </Stack>
-                                            <Date>{value.purchaseDate} 구매 / {value.purchaseDate} 까지</Date>
+                                            <Date>{value.purchaseDate} 구매 / {"2024-"+value.purchaseDate.substring(5, 10)} 까지</Date>
                                         </ProductDetail>
                                     </Grid>
                                     <Grid item xs={2}>
-                                        <Status>사용 완료</Status>
+                                        <Status>미사용</Status>
                                     </Grid>
                                 </HistoryStack>
                             )
@@ -53,7 +53,7 @@ function PurchaseHistoryPage() {
                                                 <Brand sx={{color: 'lightgrey'}}>{value.productInfo.brand}</Brand>
                                                 <ProductName sx={{color: 'lightgrey'}}>{value.productInfo.productName}</ProductName>
                                             </Stack>
-                                            <Date sx={{color: 'lightgrey'}}>{value.purchaseDate} 구매 / {value.purchaseDate} 까지</Date>
+                                            <Date sx={{color: 'lightgrey'}}>{value.purchaseDate} 구매 / {"2024-"+value.purchaseDate.substring(5, 10)} 까지</Date>
                                         </ProductDetail>
                                     </Grid>
                                     <Grid item xs={2}>
