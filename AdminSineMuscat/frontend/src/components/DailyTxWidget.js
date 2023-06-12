@@ -169,10 +169,15 @@ const DailyTxWidget = ({ fullHeight = false }) => {
       fetchData();
     }, []);
   
-  
+    const StyledLink = styled('a')({
+        textDecoration: 'none',
+    });
+    
     return (
       <Body>
-        <WidgetTitle>Daily Token Transactions</WidgetTitle>
+        <StyledLink href="https://mumbai.polygonscan.com/token/0xc5c7dC1950dE092715a08658812D94A5E76F44AF" target="_blank" rel="noopener noreferrer">
+            <WidgetTitle>Daily Token Transactions</WidgetTitle>
+        </StyledLink>
         <Box sx={{ height: fullHeight ? '400px' : '200px', width: '100%' }}>
           {data.length > 0 ? (
             fullHeight ? <FullLineChart data={data} /> : <TinyLineChart data={data} />

@@ -13,6 +13,10 @@ const ERC_721_ADMIN = '0x06D279B975c44Cc3Ff40B44CC1Bf71643192AbB7';
 // ERC_721 컨트랙트 주소
 const ERC_721_CONTRACT = '0x6462549A4Dbe5C7267d838c9Ac9418b41346916e';
 
+
+
+
+
 const UserTable = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -105,13 +109,17 @@ const UserTable = () => {
   const columns = [
     { id: 'no', label: '#', minWidth: 5 },
     { id: 'address', label: 'Address', minWidth: 100 },
-    { id: 'name', label: 'Name', minWidth: 50 },
+    // { id: 'name', label: 'Name', minWidth: 50 },
     { id: 'txnCnt', label: 'Txn Count', minWidth: 80, format: (value) => value },
   ];
 
   function createData(no, address, name, balance, txnCnt) {
     return { no, address, name, balance, txnCnt };
   }
+
+  const StyledLink = styled('a')({
+    textDecoration: 'none',
+  });
 
   return (
     <>
@@ -142,7 +150,7 @@ const UserTable = () => {
                       return (
                         <TableCell key={column.id} style={{ minWidth: column.minWidth }}>
                           {column.id === 'address' ? 
-                            <a href={`https://mumbai.polygonscan.com/address/${value}`} target="_blank" rel="noreferrer">{value}</a> : // 여기를 수정합니다.
+                            <StyledLink href={`https://mumbai.polygonscan.com/address/${value}`} target="_blank" rel="noreferrer">{value}</StyledLink> : // 여기를 수정합니다.
                             column.format && typeof value === 'number' ? column.format(value) : value
                           }
                         </TableCell>

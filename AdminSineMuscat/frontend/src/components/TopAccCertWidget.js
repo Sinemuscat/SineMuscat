@@ -16,6 +16,12 @@ const ERC_721_ADMIN = '0x06D279B975c44Cc3Ff40B44CC1Bf71643192AbB7';
 const ERC_721_CONTRACT = '0x6462549A4Dbe5C7267d838c9Ac9418b41346916e';
 
 
+const TopAccCertWidget = ({ fullHeight = false }) => {
+
+  const StyledLink = styled('a')({
+    textDecoration: 'none',
+});
+
 const UserTable = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -123,7 +129,7 @@ const UserTable = () => {
   const columns = [
     { id: 'no', label: '#', minWidth: 5 },
     { id: 'address', label: 'Address', minWidth: 100 },
-    { id: 'name', label: 'Name', minWidth: 50 },
+    // { id: 'name', label: 'Name', minWidth: 50 },
     // { id: 'balance', label: 'Balance', minWidth: 120, format: (value) => value + ' ETH' },
     { id: 'txnCnt', label: 'Txn Count', minWidth: 80, format: (value) => value },
   ];
@@ -131,6 +137,8 @@ const UserTable = () => {
   function createData(no, address, name, balance, txnCnt) {
     return { no, address, name, balance, txnCnt };
   }
+
+
 
   return (
     <>
@@ -161,7 +169,7 @@ const UserTable = () => {
     return (
       <TableCell key={column.id} style={{ minWidth: column.minWidth }}>
         {column.id === 'address' ? 
-          <a href={`https://mumbai.polygonscan.com/address/${value}`} target="_blank" rel="noreferrer">{value}</a> : // 여기를 수정합니다.
+          <StyledLink href={`https://mumbai.polygonscan.com/address/${value}`} target="_blank" rel="noreferrer">{value}</StyledLink> : 
           column.format && typeof value === 'number' ? column.format(value) : value
         }
       </TableCell>
@@ -186,10 +194,13 @@ const UserTable = () => {
   );
 };
 
-const TopAccCertWidget = ({ fullHeight = false }) => {
+
+
   return (
     <Body>
-      <WidgetTitle>Top Accounts - Certifications</WidgetTitle>
+      <StyledLink href="https://mumbai.polygonscan.com/address/0x6462549A4Dbe5C7267d838c9Ac9418b41346916e" target="_blank" rel="noopener noreferrer">
+            <WidgetTitle>Top Accounts - Certifications</WidgetTitle>
+        </StyledLink>
       <Box sx={{ width: '100%' }}>
         {fullHeight ? <UserTable /> : <Box></Box>}
       </Box>
