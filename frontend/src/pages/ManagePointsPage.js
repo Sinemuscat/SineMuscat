@@ -69,7 +69,7 @@ function ManagePointsPage() {
     const option = ["전체", "획득", "사용"];
     const [value, setValue] = useState(option[0]);
 
-    const [pointList, setPointList] = useState(user.pointList.sort((a, b) => b.id - a.id));
+    const [pointList, setPointList] = useState(user.pointList.sort((a, b) => a.id - b.id));
 
     const handleRadioChange = (event, nextValue) => {
       setValue(nextValue);
@@ -80,16 +80,16 @@ function ManagePointsPage() {
             const gainPoints = user.pointList.filter((item) => {
                 return item.point > 0;
             });
-            setPointList(gainPoints.sort((a, b) => b.id - a.id));
+            setPointList(gainPoints.sort((a, b) => a.id - b.id));
             break;
         case "사용":
             const usePoints = user.pointList.filter((item) => {
                 return item.point < 0;
             });
-            setPointList(usePoints.sort((a, b) => b.id - a.id));
+            setPointList(usePoints.sort((a, b) => a.id - b.id));
             break;
         default:
-            setPointList(user.pointList.sort((a, b) => b.id - a.id));
+            setPointList(user.pointList.sort((a, b) => a.id - b.id));
             break;
         }
     };
