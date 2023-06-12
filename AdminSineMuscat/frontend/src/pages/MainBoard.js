@@ -10,8 +10,8 @@ const MainBoard = () => {
     return (
         <Grid container rowSpacing={2} columnSpacing={5}>
             <Grid item xs={12}><DailyTxWidget /></Grid>
-            <Grid item xs={6}><TopAccCertWidget /></Grid>
-            <Grid item xs={6}><TopAccBuyingWidget /></Grid>
+            <Grid item xs={6}><TopAccCertWidget fullHeight = {true}/></Grid>
+            <Grid item xs={6}><TopAccBuyingWidget fullHeight = {true}/></Grid>
         </Grid>
     );
 };
